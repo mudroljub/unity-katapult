@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     public GameObject terrain;
 
     private static GameManager instance;
-    [SerializeField] private PopupNotification popup;
 
     [Header("Configuration Parameters")]
     [SerializeField] private float camLerpSpeed = 0.1f;
@@ -157,7 +156,6 @@ public class GameManager : MonoBehaviour
     public void Reset()
     {
         sliderLockOut = false;
-        popup.Reset();
 
         if(activeCoroutine != null)
         {
