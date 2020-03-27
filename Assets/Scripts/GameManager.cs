@@ -158,21 +158,10 @@ public class GameManager : MonoBehaviour
         Reset();
     }
 
-    public void Update()
-    {
-
-        if (catapult.launched)
-        {
-            // Constantly raycast to detect knocked over boxes, once the cannonball is launched in Freeplay Box Mode
-            cubeWall.CalculateScore();
-        }
-    }
-
     public void Reset()
     {
         sliderLockOut = false;
         popup.Reset();
-        HideGizmoAndWidgets();
 
         if(activeCoroutine != null)
         {
@@ -200,21 +189,6 @@ public class GameManager : MonoBehaviour
         cubeWall.Reset();
     }
 
-    private void HideGizmoAndWidgets()
-    {
-        gravArrow.Hide();
-        springArrow.Hide();
-        tensionArrow.Hide();
-        resultArrow.Hide();
-        distanceGizmo.Hide();
-        energyWidget.Hide();
-
-        foreach (ArrowIndicator arrow in vectorArrows)
-        {
-            arrow.Hide();
-        }
-    }
-
     public static GameManager GetInstance()
     {
         return instance;
@@ -235,7 +209,7 @@ public class GameManager : MonoBehaviour
         springArrow.Show();
         gravArrow.Show();
 
-        CalculateForces();
+        CalculateDeltaTime();
     }
 
     public void LaunchFreePlayCannonBall()
@@ -277,19 +251,13 @@ public class GameManager : MonoBehaviour
     public void ShowMassChange()
     {
         gravArrow.ChangeArrowWeight(cannonBall.WeightForce);
-        CalculateForces();
+        CalculateDeltaTime();
     }
 
     public void ShowSpringChange()
     {
         springArrow.ChangeArrowWeight(SpringForce);
-        CalculateForces();
-    }
-
-    // calculate effect on all forces
-    public void CalculateForces()
-    {
         CalculateDeltaTime();
     }
-   
+
 }

@@ -38,17 +38,6 @@ public class CubeWall : MonoBehaviour
         }
     }
 
-    public void CalculateScore()
-    {
-        Ray leftRay = new Ray(leftRaycaster.position, leftRaycaster.up);
-        RaycastHit[] leftHits = Physics.RaycastAll(leftRay, Mathf.Infinity, boxLayer);
-
-        Ray rightRay = new Ray(rightRaycaster.position, rightRaycaster.up);
-        RaycastHit[] rightHits = Physics.RaycastAll(rightRay, Mathf.Infinity, boxLayer);
-
-        int totalFallen = TotalKnockableBoxes- (leftHits.Length + rightHits.Length);
-    }
-
     public void SetKinematic(bool enabled)
     {
         foreach(Rigidbody rigidBody in boxRigidBodies)
