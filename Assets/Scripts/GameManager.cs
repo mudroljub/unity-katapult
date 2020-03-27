@@ -6,10 +6,6 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [Header("Start Params")]
-    public float DistanceFromGround_At_TimeOFLaunch;     // The minimum distance between the cannon ball and the ground to initiate the SlopeDown learning step
-    public GameObject arrowBasicFrontPivotPrefab;
-    public GameObject arrowBasicBackPivotPrefab;
-
     public List<GameObject> markers = new List<GameObject>();
     public GameObject terrain;
 
