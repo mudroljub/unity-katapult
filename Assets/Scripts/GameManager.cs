@@ -273,75 +273,12 @@ public class GameManager : MonoBehaviour
         return instance;
     }
 
-    public static bool HasInstance()
-    {
-        return instance;
-    }
-
-    public void ExecuteVectorLearningMode()
-    {
-        cubeWall.gameObject.SetActive(false);
-        catapult.launchSpeed = Catapult.LAUNCH_SPEED_LESSON;
-    }
-
-    public void ExecuteEnergyLearningMode()
-    {
-        cubeWall.gameObject.SetActive(false);
-        catapult.launchSpeed = Catapult.LAUNCH_SPEED_LESSON;
-    }
-
-    // Reset defaults and initiate Free Play Target Mode
-    public void ExecuteFreePlayTargetMode()
-    {
-        cubeWall.gameObject.SetActive(true);
-        cubeWall.ShowAllBoxes();
-        cubeWall.SetKinematic(true);
-        catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;
-
-        InitializeFreePlayTargetMode();
-    }
-
-    // Initialize FreePlay Target Mode
-    public void InitializeFreePlayTargetMode()
-    {
-        Vector3 SVector = CalculateSVector();
-
-        springArrow.SetArrowTransform(cannonBall.SpringPoint_Centered);
-        springArrow.transform.up = SVector.normalized;
-        SpringK = SVector.magnitude;
-
-        gravArrow.SetArrowTransform(cannonBall.CenterWeightPoint);
-
-        springArrow.Show();
-        gravArrow.Show();
-
-        CalculateForces();
-    }
-
     // Reset defaults and initiate Free Play Box Mode
     public void ExecuteFreePlayBoxMode()
     {
         cubeWall.gameObject.SetActive(true);
         cubeWall.ShowCenterRowOnly();
         cubeWall.SetKinematic(false);
-
-        catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;
-
-        springArrow.SetArrowTransform(cannonBall.SpringPoint_Centered);
-        gravArrow.SetArrowTransform(cannonBall.CenterWeightPoint);
-
-        springArrow.Show();
-        gravArrow.Show();
-
-        CalculateForces();
-    }
-
-    // Reset defaults and initiate Free Play Basketball Mode
-    public void ExecuteBasketballMode()
-    {
-        cubeWall.gameObject.SetActive(true);
-        cubeWall.ShowAllBoxes();
-        cubeWall.SetKinematic(true);
 
         catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;
 
@@ -401,23 +338,6 @@ public class GameManager : MonoBehaviour
         springArrow.ChangeArrowWeight(SpringForce);
         CalculateForces();
     }
-
-    private void CalculateResultVector()
-    {
-        // Scale the Spring and Weight Unit Vectors by their force
-        Vector3 springVector = catapult.springVector.transform.up * SpringForce;
-        Vector3 weightVector = cannonBall.CenterWeightPoint.transform.up * cannonBall.WeightForce;
-
-        // Combine both scaled vectors to get the scaled Resultant Force
-        Vector3 resultVector = springVector + weightVector;
-
-        // Orient the Result Gizmo Arrow to align with the resultant vector above (visual)
-        catapult.resultVector.up = resultVector.normalized;
-
-        // Update resultant force (magnitude of the result vector calculated above)
-        ResultForce = resultVector.magnitude;
-    }
-
 
     // calculate effect on all forces
     public void CalculateForces()

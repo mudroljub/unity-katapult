@@ -1,9 +1,7 @@
-﻿using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 /* TODO: ukinuti ovaj prozor, prebaciti pucanje na katapult
-    - razdvojiti zavisnot od GameManager-a
 */
 
 public class EditorPhysicsConfig : EditorWindow
@@ -30,24 +28,19 @@ public class EditorPhysicsConfig : EditorWindow
         GUILayoutOption[] springSliderLayout = { GUILayout.Width(350), GUILayout.Height(18) };
         SpringK = EditorGUILayout.Slider("Spring Force", SpringK, 250, 15000, springSliderLayout);
 
-        if (GUI.Button(new Rect(60, 100, 150, 50), GetText(gm)))
+        if (GUI.Button(new Rect(60, 100, 150, 50), "Launch Catapault"))
         {
             if (gm.catapult.launched)
             {
-                Reset();
+                gm.Reset();
+                gm.ExecuteFreePlayBoxMode();
             }
             else
             {
-                LaunchCatapult();
+                gm.LaunchFreePlayCannonBall();
             }
         }
 #endif
-    }
-
-    private string GetText(GameManager gm)
-    {
-        gm = GameManager.GetInstance();
-        return gm.catapult.launched ? "Restart" : "Launch Catapault";
     }
 
     private void Update()
@@ -55,17 +48,6 @@ public class EditorPhysicsConfig : EditorWindow
         gm = GameManager.GetInstance();
         gm.UpdateCannonBallMass(CannonBallMass);
         gm.UpdateSpringForce(SpringK);
-    }
-
-    private void Reset()
-    {
-        gm.Reset();
-        gm.ExecuteFreePlayBoxMode();
-    }
-
-    private void LaunchCatapult()
-    {
-        gm.LaunchFreePlayCannonBall();
     }
 
 }
