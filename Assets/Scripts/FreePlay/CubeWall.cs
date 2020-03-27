@@ -47,7 +47,6 @@ public class CubeWall : MonoBehaviour
         RaycastHit[] rightHits = Physics.RaycastAll(rightRay, Mathf.Infinity, boxLayer);
 
         int totalFallen = TotalKnockableBoxes- (leftHits.Length + rightHits.Length);
-        GameManager.GetInstance().uiController.boxesUI.scoreText.text = totalFallen.ToString() + "/" + TotalKnockableBoxes.ToString();
     }
 
     public void SetKinematic(bool enabled)

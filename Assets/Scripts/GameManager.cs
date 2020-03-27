@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     public float DistanceFromGround_At_TimeOFLaunch;     // The minimum distance between the cannon ball and the ground to initiate the SlopeDown learning step
     public GameObject arrowBasicFrontPivotPrefab;
     public GameObject arrowBasicBackPivotPrefab;
-    public UIController uiController;
 
     public List<GameObject> markers = new List<GameObject>();
     public GameObject terrain;
@@ -160,7 +159,6 @@ public class GameManager : MonoBehaviour
         float vF = -vertVelocity;
         float deltaV = vF - vI;
         float deltaTime = deltaV / Physics.gravity.y;
-        uiController.physicsUIPanel.timeText.text = Math.Round(deltaTime, 2).ToString() + " s";
         return deltaTime;
     }
 
@@ -176,9 +174,6 @@ public class GameManager : MonoBehaviour
 
         // Stretch the distance gizmo to show the pre-calculated horizontal distance
         distanceGizmo.StretchGizmo(horizontalDistance);
-
-        // Update the Distance Text on the UI Physics Info (Top Left UI)  
-        uiController.physicsUIPanel.distanceText.text = Math.Round(horizontalDistance, 2).ToString() + " m";
     }
 
     // Force that is the combined Normal and Centrifugal force of the catapult spoon on the cannonball as the arm rises
@@ -220,15 +215,6 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        // Update UI
-        if (cannonBall.paused)
-        {
-            uiController.physicsUIPanel.velocityText.text = (float)Math.Round(cannonBall.currentVelocity.magnitude, 2) + " m/s";
-        }
-        else
-        {
-            uiController.physicsUIPanel.velocityText.text = (float)Math.Round(cannonBall.rigidBody.velocity.magnitude, 2) + " m/s";
-        }
 
         if (catapult.launched)
         {
@@ -299,9 +285,6 @@ public class GameManager : MonoBehaviour
         cubeWall.gameObject.SetActive(false);
         targetBoard.gameObject.SetActive(false);
         ballHoop.gameObject.SetActive(false);
-
-        uiController.physicsUIPanel.ShowAllUIs();
-
         catapult.launchSpeed = Catapult.LAUNCH_SPEED_LESSON;
     }
 
@@ -310,9 +293,6 @@ public class GameManager : MonoBehaviour
         cubeWall.gameObject.SetActive(false);
         targetBoard.gameObject.SetActive(false);
         ballHoop.gameObject.SetActive(false);
-
-        uiController.physicsUIPanel.ShowAllUIs();
-
         catapult.launchSpeed = Catapult.LAUNCH_SPEED_LESSON;
     }
 
@@ -325,11 +305,6 @@ public class GameManager : MonoBehaviour
         targetBoard.gameObject.SetActive(true);
         ballHoop.gameObject.SetActive(false);
         cubeWall.SetKinematic(true);
-
-        // Hide Distance UI during Free play
-        uiController.physicsUIPanel.ShowAllUIs();
-        uiController.physicsUIPanel.distanceWidget.SetActive(false);
-
         catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;
 
         InitializeFreePlayTargetMode();
@@ -362,11 +337,6 @@ public class GameManager : MonoBehaviour
         ballHoop.gameObject.SetActive(false);
         cubeWall.SetKinematic(false);
 
-        // Hide Distance UI during Free play
-        uiController.physicsUIPanel.ShowAllUIs();
-        uiController.physicsUIPanel.distanceWidget.SetActive(false);
-        uiController.boxesUI.Reset();
-
         catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;
 
         springArrow.SetArrowTransform(cannonBall.SpringPoint_Centered);
@@ -387,10 +357,6 @@ public class GameManager : MonoBehaviour
         ballHoop.gameObject.SetActive(true);
         ballHoop.Reset();
         cubeWall.SetKinematic(true);
-
-        // Hide Distance UI during Free play
-        uiController.physicsUIPanel.ShowAllUIs();
-        uiController.physicsUIPanel.distanceWidget.SetActive(false);
 
         catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;
 

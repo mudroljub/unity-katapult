@@ -138,9 +138,6 @@ public class CannonBall : MonoBehaviour
                 }
             }
 
-            // Update the score on the UI
-            GameManager.GetInstance().uiController.targetUI.scoreText.text = GameManager.GetInstance().targetBoard.totalScore.ToString();
-
             framesSinceHit++;
         }
     }

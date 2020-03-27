@@ -10,13 +10,4 @@ public class BasketballHoop : MonoBehaviour
     {
         hoopScore = 0;
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "CannonBall")
-        {
-            hoopScore++;
-            GameManager.GetInstance().uiController.ballUIPanel.scoreText.text = hoopScore.ToString();
-        }
-    }
 }
