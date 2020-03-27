@@ -32,17 +32,16 @@ public class EditorPhysicsConfig : EditorWindow
 
         if (GUI.Button(new Rect(60, 100, 150, 50), GetText(gm)))
         {
-            Action callBack = GetCallBack(gm);
-            callBack();
+            if (gm.catapult.launched)
+            {
+                Reset();
+            }
+            else
+            {
+                LaunchCatapult();
+            }
         }
 #endif
-    }
-
-    private void StartPlayEditor()
-    {
-#if UNITY_EDITOR
-        EditorApplication.isPlaying = true;
-#endif       
     }
 
     private string GetText(GameManager gm)
@@ -51,27 +50,9 @@ public class EditorPhysicsConfig : EditorWindow
         return gm.catapult.launched ? "Restart" : "Launch Catapault";
     }
 
-    // Returns the correct callback for the execution button based on state of game
-    private Action GetCallBack(GameManager gm)
-    {
-        if (gm.catapult.launched)
-        {
-            return Reset;
-        }
-        else
-        {
-            return LaunchCatapult;
-        }
-    }
-
     private void Update()
     {
         gm = GameManager.GetInstance();
-        if (!gm.lessonStarted)
-        {
-            StartFreePlayBox();
-        }
-
         gm.UpdateCannonBallMass(CannonBallMass);
         gm.UpdateSpringForce(SpringK);
     }
@@ -85,12 +66,6 @@ public class EditorPhysicsConfig : EditorWindow
     private void LaunchCatapult()
     {
         gm.LaunchFreePlayCannonBall();
-    }
-
-    private void StartFreePlayBox()
-    {
-        gm.lessonStarted = true;
-        gm.CurrentPhysicsMode = PhysicsMode.FreePlayBox;
     }
 
 }
