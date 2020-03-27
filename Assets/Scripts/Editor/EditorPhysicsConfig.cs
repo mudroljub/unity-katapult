@@ -2,11 +2,15 @@
 using UnityEditor;
 using UnityEngine;
 
+/* TODO: ukinuti ovaj prozor, prebaciti pucanje na katapult
+    - razdvojiti zavisnot od GameManager-a
+*/
+
 public class EditorPhysicsConfig : EditorWindow
 {
-    public static EditorPhysicsConfig instance;
-    public static float CannonBallMass;
+    public static float CannonBallMass = 1;
     public static float SpringK;
+    private GameManager gm;
 
     // Make Window accessible from Window Panel
     [MenuItem("Window/Physics Config Window")]
@@ -15,22 +19,10 @@ public class EditorPhysicsConfig : EditorWindow
         GetWindow(typeof(EditorPhysicsConfig));
     }
 
-    private void Awake()
-    {
-        instance = this;
-        CannonBallMass = GameManager.DEFAULT_CANNON_BALL_MASS;
-
-         // Forces the Editor to the aspect ratio that is best used to view the learning module
-        GameViewUtils.SwitchToSize(new Vector2(16, 9), GameViewUtils.GameViewSizeType.AspectRatio, "Unity Physics Aspect");
-    }
-
-    const float vertStart = 140;
     private void OnGUI()
     {
 #if UNITY_EDITOR
-        GameManager gm = GameManager.GetInstance();
-
-        GUILayout.Space(vertStart + 40f);
+        GUILayout.Space(40f);
 
         GUILayoutOption[] massSliderLayout = { GUILayout.Width(350), GUILayout.Height(18) };
         CannonBallMass = EditorGUILayout.Slider("Cannonball Mass", CannonBallMass, 1f, 20, massSliderLayout);
@@ -38,9 +30,7 @@ public class EditorPhysicsConfig : EditorWindow
         GUILayoutOption[] springSliderLayout = { GUILayout.Width(350), GUILayout.Height(18) };
         SpringK = EditorGUILayout.Slider("Spring Force", SpringK, 250, 15000, springSliderLayout);
 
-        GUI.enabled = true;
-
-        if (GUI.Button(new Rect(60, 240, 150, 50), GetText(gm)))
+        if (GUI.Button(new Rect(60, 100, 150, 50), GetText(gm)))
         {
             Action callBack = GetCallBack(gm);
             callBack();
@@ -57,14 +47,8 @@ public class EditorPhysicsConfig : EditorWindow
 
     private string GetText(GameManager gm)
     {
-        if (gm.catapult.launched)
-        {
-            return "Restart";
-        }
-        else
-        {
-            return "Launch Catapault";
-        }
+        gm = GameManager.GetInstance();
+        return gm.catapult.launched ? "Restart" : "Launch Catapault";
     }
 
     // Returns the correct callback for the execution button based on state of game
@@ -72,7 +56,7 @@ public class EditorPhysicsConfig : EditorWindow
     {
         if (gm.catapult.launched)
         {
-            return ResetFreePlayEnvironment;
+            return Reset;
         }
         else
         {
@@ -80,58 +64,33 @@ public class EditorPhysicsConfig : EditorWindow
         }
     }
 
-    private bool IsFreePlay()
-    {
-        return true;
-    }
-
     private void Update()
     {
-        GameManager gm = GameManager.GetInstance();
-        if (gm != null)
+        gm = GameManager.GetInstance();
+        if (!gm.lessonStarted)
         {
-            if (!gm.lessonStarted)
-            {
-                StartLesson();
-            }
-
-            gm.UpdateCannonBallMass(CannonBallMass);
-            gm.UpdateSpringForce(SpringK);
+            StartFreePlayBox();
         }
+
+        gm.UpdateCannonBallMass(CannonBallMass);
+        gm.UpdateSpringForce(SpringK);
     }
 
-    // Starts a physics lesson that is chosen
-    private void StartLesson()
+    private void Reset()
     {
-        StartFreePlayBox();
-    }
-
-    private void ResetFreePlayEnvironment()
-    {
-        GameManager.GetInstance().Reset();
-        ResetFreePlayBoxes();
+        gm.Reset();
+        gm.ExecuteFreePlayBoxMode();
     }
 
     private void LaunchCatapult()
     {
-        GameManager.GetInstance().LaunchFreePlayCannonBall();
+        gm.LaunchFreePlayCannonBall();
     }
 
     private void StartFreePlayBox()
     {
-        if (GameManager.GetInstance() != null)
-        {
-            GameManager.GetInstance().lessonStarted = true;
-            GameManager.GetInstance().CurrentPhysicsMode = PhysicsMode.FreePlayBox;
-        }
-        else
-        {
-            Debug.Log("Click [Start Playing] Button on the Physics Config Panel to Start the lesson");
-        }
+        gm.lessonStarted = true;
+        gm.CurrentPhysicsMode = PhysicsMode.FreePlayBox;
     }
 
-    private void ResetFreePlayBoxes()
-    {
-        GameManager.GetInstance().ExecuteFreePlayBoxMode();
-    }
 }

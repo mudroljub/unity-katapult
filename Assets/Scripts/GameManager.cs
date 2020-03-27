@@ -16,9 +16,6 @@ public enum PhysicsMode
 public class GameManager : MonoBehaviour
 {
     [Header("Start Params")]
-    public const float DEFAULT_CANNON_BALL_MASS = 30;
-    public const float DEFAULT_SPRING_FORCE = 600;
-    public const float FORCE_SCALE_FACTOR = 1f; // Extra scaling needed to make the resultant force to shoot the ball
     public float DistanceFromGround_At_TimeOFLaunch;     // The minimum distance between the cannon ball and the ground to initiate the SlopeDown learning step
     public GameObject arrowBasicFrontPivotPrefab;
     public GameObject arrowBasicBackPivotPrefab;
