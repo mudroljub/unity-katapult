@@ -75,37 +75,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [ReadOnly] [SerializeField] private float tensionForce;
-    public float TensionForce
-    {
-        get
-        {
-            return tensionForce;
-        }
-        set
-        {
-            tensionForce = value;
-            tensionArrow.ChangeArrowWeight(tensionForce);
-        }
-    }
-
-    [ReadOnly] [SerializeField] private float resultForce;
-    public float ResultForce
-    {
-        get
-        {
-            return resultForce;
-        }
-        set
-        {
-            resultForce = value;
-            if (resultArrow.isActiveAndEnabled)
-            {
-                resultArrow.ChangeArrowWeight(resultForce);
-            }
-        }
-    }
-
     #region Physics Formulas
 
     // The Elastic Potential Energy of the Cannonball as a result of the recoiled Catapult Arm 
@@ -130,14 +99,6 @@ public class GameManager : MonoBehaviour
         return ratio;
     }
 
-    // Equation for Kinetic Energy at time of launch 
-    // Formula: (0.5 * m * vI²)
-    private float Kinetic_Energy_At_Launch()
-    {
-        float vel = Velocity_At_Time_Of_Launch();
-        return 0.5f * cannonBall.Mass * Mathf.Pow(vel, 2);
-    }
-
     // Find the instantaneous velocity at the time of the cannonball's launch from the Catapault Arm
     // Formula: √(springK / m) * angle² - (g * √2)
     public float Velocity_At_Time_Of_Launch()
@@ -158,20 +119,6 @@ public class GameManager : MonoBehaviour
         float deltaV = vF - vI;
         float deltaTime = deltaV / Physics.gravity.y;
         return deltaTime;
-    }
-
-    /// <summary>
-    /// Distance is calculated using the horizontal component of velocity multiplies by delta time 
-    /// Formula: ( vIh * dt )
-    /// </summary>
-    public void CalculateDistance()
-    {
-        float horizVelocity = Velocity_At_Time_Of_Launch() * Mathf.Sin(catapult.DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad);
-        float deltaTime = CalculateDeltaTime();
-        float horizontalDistance = horizVelocity * deltaTime;
-
-        // Stretch the distance gizmo to show the pre-calculated horizontal distance
-        distanceGizmo.StretchGizmo(horizontalDistance);
     }
 
     // Force that is the combined Normal and Centrifugal force of the catapult spoon on the cannonball as the arm rises
