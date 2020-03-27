@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using EnableEducation;
 using UnityEngine;
 
 public enum PhysicsMode
@@ -50,49 +49,15 @@ public class GameManager : MonoBehaviour
         CompleteArc
     }
 
-    [ReadOnly] [SerializeField] private PhysicsMode currentPhysicsMode = PhysicsMode.Forces;
-
-    public PhysicsMode CurrentPhysicsMode
-    {
-        get
-        {
-            return PhysicsMode.FreePlayBox;
-        }
-        set
-        {
-            OnPhysicsModeChanged(value);
-            currentPhysicsMode = value;
-        }
-    }
-
     [ReadOnly] public LearningStep currentStep = LearningStep.NotStarted;
     [ReadOnly] public MidAirStep midAirStep = MidAirStep.Undefined;
 
     [Header("Scene References")]
     public Camera mainCam;
     public Camera uiCam;
-
     public Action OnEditorFocus;
-
     public bool sliderLockOut = false;
-    private bool canProcessNextStep = true;
-    public bool CanProcessNextStep
-    {
-        get
-        {
-            return canProcessNextStep;
-        }
-        set
-        {
-            canProcessNextStep = value;
-            if(OnEditorFocus!=null)
-            {
-                OnEditorFocus();
-            }
-        }
-    }
 
-    private bool failLaunch = false;
     [SerializeField] private CubeWall cubeWall;
     [SerializeField] public TargetBoard targetBoard;
     [SerializeField] public Catapult catapult;
@@ -298,17 +263,12 @@ public class GameManager : MonoBehaviour
         if (catapult.launched)
         {
             // Constantly raycast to detect knocked over boxes, once the cannonball is launched in Freeplay Box Mode
-            if (CurrentPhysicsMode == PhysicsMode.FreePlayBox)
-            {
-                cubeWall.CalculateScore();
-            }
+            cubeWall.CalculateScore();
         }
     }
 
     public void Reset()
     {
-        failLaunch = false;
-        CanProcessNextStep = true;
         sliderLockOut = false;
         popup.Reset();
         HideGizmoAndWidgets();
@@ -339,13 +299,6 @@ public class GameManager : MonoBehaviour
         catapult.Reset();
         cannonBall.Reset();
         cubeWall.Reset();
-    }
-
-    private void OnPhysicsModeChanged(PhysicsMode physicsMode)
-    {
-        Reset();
-        uiController.OnPhysicsModeChanged(physicsMode);
-        ExecuteFreePlayBoxMode();
     }
 
     private void HideGizmoAndWidgets()
@@ -488,31 +441,9 @@ public class GameManager : MonoBehaviour
         activeCoroutine = StartCoroutine(DoProcessFreePlayLaunch());
     }
 
-    #region Energy
-
-    public IEnumerator DoProcessStoppedState_Energy()
-    {
-        CanProcessNextStep = false;
-
-        yield return StartCoroutine(DoLerpCameraToTransform(cannonBall.step4CamTransform)); // RE focus camera
-
-        CanProcessNextStep = true;
-
-        energyWidget.AttachToTransform(cannonBall.EnergyWidgetMarker_TopOffset);
-        energyWidget.Show();
-
-        energyWidget.UpdateGravEnergy(0);   // Cheat (make this show real grav potential energy)
-
-        activeCoroutine = null;
-    }
-
-    #endregion
-
     #region FreePlay
     public IEnumerator DoProcessFreePlayLaunch()
     {
-        CanProcessNextStep = false;
-
         yield return new WaitWhile(() => { return catapult.throwCalled; });
 
         float velocity = Velocity_At_Time_Of_Launch();
@@ -522,16 +453,6 @@ public class GameManager : MonoBehaviour
         activeCoroutine = null;
     }
     #endregion
-
-    private bool RaycastFromPos(Vector3 pos, Vector3 dir, float distance, out RaycastHit hitResult, bool debug = false)
-    {
-        if (debug)
-        {
-            Debug.DrawLine(pos, pos + (dir * distance), Color.red, 10);
-        }
-        Ray ray = new Ray(pos, dir);
-        return Physics.Raycast(ray, out hitResult, distance, terrainLayer);
-    }   
 
     public void UpdateCannonBallMass(float _mass)
     {
@@ -552,50 +473,14 @@ public class GameManager : MonoBehaviour
     // Show animation related to change of mass, also update opposing and like forces
     public void ShowMassChange()
     {
-        switch(currentPhysicsMode)
-        {
-            case PhysicsMode.Forces:
-                gravArrow.ChangeArrowWeight(cannonBall.WeightForce);
-                CalculateForces();
-                CalculateDistance();
-                break;
-
-            case PhysicsMode.FreePlayTarget:
-            case PhysicsMode.FreePlayBox:
-            case PhysicsMode.BasketballChallenge:
-                gravArrow.ChangeArrowWeight(cannonBall.WeightForce);
-                CalculateForces();
-                break;
-
-            case PhysicsMode.Energy:
-                energyWidget.UpdateGravEnergy(cannonBall.Gravitational_Potential_Energy());
-                CalculateDistance();
-                break;
-        }
+        gravArrow.ChangeArrowWeight(cannonBall.WeightForce);
+        CalculateForces();
     }
 
     public void ShowSpringChange()
     {
-        switch (currentPhysicsMode)
-        {
-            case PhysicsMode.Forces:
-                springArrow.ChangeArrowWeight(SpringForce);
-                CalculateForces();
-                CalculateDistance();
-                break;
-
-            case PhysicsMode.FreePlayTarget:
-            case PhysicsMode.FreePlayBox:
-            case PhysicsMode.BasketballChallenge:
-                springArrow.ChangeArrowWeight(SpringForce);
-                CalculateForces();
-                break;
-
-            case PhysicsMode.Energy:
-                energyWidget.UpdateElasticEnergy(Kinetic_Energy_At_Launch());
-                CalculateDistance();
-                break;
-        }
+        springArrow.ChangeArrowWeight(SpringForce);
+        CalculateForces();
     }
 
     private void CalculateResultVector()
@@ -618,63 +503,7 @@ public class GameManager : MonoBehaviour
     // calculate effect on all forces
     public void CalculateForces()
     {
-        switch (currentPhysicsMode)
-        {
-            case PhysicsMode.Forces:
-            case PhysicsMode.Energy:
-
-                switch (currentStep)
-                {
-                    case LearningStep.PreLaunch:
-                        // Update tensions force and clamp between 0 and infinity
-                        TensionForce = Mathf.Clamp((SpringForce - cannonBall.WeightForce), 0, Mathf.Infinity);
-                        break;
-
-                    case LearningStep.TimeOfLaunch:
-                        // Update resultant force and clamp between 0 and infinity
-                        ResultForce = Mathf.Clamp((SpringForce - cannonBall.WeightForce), 0, Mathf.Infinity);
-                        CalculateResultVector();
-                        resultArrow.SetArrowTransform(catapult.resultVector);
-                        break;
-
-                    case LearningStep.Stopped:
-                        // Update resultant force and clamp between 0 and infinity
-                        ResultForce = cannonBall.WeightForce;
-                        break;
-                }
-
-                break;
-
-            case PhysicsMode.FreePlayTarget: 
-            case PhysicsMode.FreePlayBox:
-            case PhysicsMode.BasketballChallenge:
-                CalculateDeltaTime();
-                break;
-        }
+        CalculateDeltaTime();
     }
-
-    // Orient the local up vector of a transform to align with a specific Vector
-    private void OrientTransformToVector(ref Transform _transform, Vector3 vec)
-    {
-        _transform.up = vec.normalized;
-    }
-
-    private IEnumerator DoLerpCameraToTransform(Transform transformPoint)
-    {
-        bool posReached = false;
-        bool rotReached = false;
-
-        while (!posReached || !rotReached)
-        {
-            yield return null;
-
-            mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, transformPoint.position, camLerpSpeed);
-            mainCam.transform.rotation = Quaternion.Slerp(mainCam.transform.rotation, transformPoint.rotation, camLerpSpeed);
-
-            posReached = EEMath.Approximately(mainCam.transform.position, transformPoint.position, 0.01f);
-            rotReached = EEMath.Approximately(mainCam.transform.rotation.eulerAngles, transformPoint.transform.rotation.eulerAngles, 0.01f);
-        }
-    }
-
    
 }
