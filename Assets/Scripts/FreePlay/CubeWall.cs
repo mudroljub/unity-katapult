@@ -15,6 +15,7 @@ public class CubeWall : MonoBehaviour
     // Store all box locations in the cubewall
     private void Awake()
     {
+        // ShowCenterRowOnly();
         TotalKnockableBoxes = middleRowBoxes.Count;
 
         foreach(Transform child in transform)

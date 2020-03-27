@@ -30,15 +30,16 @@ public class EditorPhysicsConfig : EditorWindow
 
         if (GUI.Button(new Rect(60, 100, 150, 50), "Launch Catapault"))
         {
-            if (gm.catapult.launched)
-            {
+            //if (gm.catapult.launched)
+            //{
+            //    gm.Reset();
+            //    gm.ExecuteFreePlayBoxMode();
+            //}
+            //else
+            //{
                 gm.Reset();
-                gm.ExecuteFreePlayBoxMode();
-            }
-            else
-            {
                 gm.LaunchFreePlayCannonBall();
-            }
+            //}
         }
 #endif
     }

@@ -11,9 +11,6 @@ public class GameManager : MonoBehaviour
 
     private static GameManager instance;
 
-    [Header("Configuration Parameters")]
-    [SerializeField] private float camLerpSpeed = 0.1f;
-
     Coroutine activeCoroutine;
 
     [Header("Scene References")]
@@ -188,26 +185,9 @@ public class GameManager : MonoBehaviour
         return instance;
     }
 
-    // Reset defaults and initiate Free Play Box Mode
-    public void ExecuteFreePlayBoxMode()
-    {
-        cubeWall.gameObject.SetActive(true);
-        cubeWall.ShowCenterRowOnly();
-        cubeWall.SetKinematic(false);
-
-        catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;
-
-        springArrow.SetArrowTransform(cannonBall.SpringPoint_Centered);
-        gravArrow.SetArrowTransform(cannonBall.CenterWeightPoint);
-
-        springArrow.Show();
-        gravArrow.Show();
-
-        CalculateDeltaTime();
-    }
-
     public void LaunchFreePlayCannonBall()
     {
+        catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;
         catapult.throwCalled = true;
         activeCoroutine = StartCoroutine(DoProcessFreePlayLaunch());
     }
