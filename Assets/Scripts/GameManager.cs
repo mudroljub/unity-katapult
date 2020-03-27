@@ -3,15 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PhysicsMode
-{
-    Forces,
-    Energy,
-    FreePlayTarget,
-    FreePlayBox,
-    BasketballChallenge
-}
-
 public class GameManager : MonoBehaviour
 {
     [Header("Start Params")]
@@ -30,27 +21,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float camLerpSpeed = 0.1f;
 
     Coroutine activeCoroutine;
-
-    public enum LearningStep
-    {
-        NotStarted = -1,
-        PreLaunch = 0,
-        TimeOfLaunch = 1,
-        MidAir = 2,
-        Stopped = 3,
-    }
-
-    public enum MidAirStep
-    {
-        Undefined,
-        Launching,
-        Maxheight,
-        SlopeDown,
-        CompleteArc
-    }
-
-    [ReadOnly] public LearningStep currentStep = LearningStep.NotStarted;
-    [ReadOnly] public MidAirStep midAirStep = MidAirStep.Undefined;
 
     [Header("Scene References")]
     public Camera mainCam;
@@ -283,8 +253,6 @@ public class GameManager : MonoBehaviour
             Destroy(marker);
         }
         markers.Clear();
-        currentStep = LearningStep.NotStarted;
-        midAirStep = MidAirStep.Undefined;
 
         foreach(ArrowIndicator arrow in vectorArrows)
         {
