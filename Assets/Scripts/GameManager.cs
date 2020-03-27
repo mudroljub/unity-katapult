@@ -28,10 +28,8 @@ public class GameManager : MonoBehaviour
     public bool sliderLockOut = false;
 
     [SerializeField] private CubeWall cubeWall;
-    [SerializeField] public TargetBoard targetBoard;
     [SerializeField] public Catapult catapult;
     [SerializeField] public CannonBall cannonBall;
-    [SerializeField] public BasketballHoop ballHoop;
     [SerializeField] private ArrowIndicator gravArrow;
     [SerializeField] private ArrowIndicator tensionArrow;
     [SerializeField] private ArrowIndicator springArrow;
@@ -283,16 +281,12 @@ public class GameManager : MonoBehaviour
     public void ExecuteVectorLearningMode()
     {
         cubeWall.gameObject.SetActive(false);
-        targetBoard.gameObject.SetActive(false);
-        ballHoop.gameObject.SetActive(false);
         catapult.launchSpeed = Catapult.LAUNCH_SPEED_LESSON;
     }
 
     public void ExecuteEnergyLearningMode()
     {
         cubeWall.gameObject.SetActive(false);
-        targetBoard.gameObject.SetActive(false);
-        ballHoop.gameObject.SetActive(false);
         catapult.launchSpeed = Catapult.LAUNCH_SPEED_LESSON;
     }
 
@@ -301,9 +295,6 @@ public class GameManager : MonoBehaviour
     {
         cubeWall.gameObject.SetActive(true);
         cubeWall.ShowAllBoxes();
-
-        targetBoard.gameObject.SetActive(true);
-        ballHoop.gameObject.SetActive(false);
         cubeWall.SetKinematic(true);
         catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;
 
@@ -332,9 +323,6 @@ public class GameManager : MonoBehaviour
     {
         cubeWall.gameObject.SetActive(true);
         cubeWall.ShowCenterRowOnly();
-
-        targetBoard.gameObject.SetActive(false);
-        ballHoop.gameObject.SetActive(false);
         cubeWall.SetKinematic(false);
 
         catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;
@@ -353,9 +341,6 @@ public class GameManager : MonoBehaviour
     {
         cubeWall.gameObject.SetActive(true);
         cubeWall.ShowAllBoxes();
-        targetBoard.gameObject.SetActive(false);
-        ballHoop.gameObject.SetActive(true);
-        ballHoop.Reset();
         cubeWall.SetKinematic(true);
 
         catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;

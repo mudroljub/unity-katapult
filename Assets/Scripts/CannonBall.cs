@@ -108,38 +108,6 @@ public class CannonBall : MonoBehaviour
     {
         // always calculate height from ground
         heightFromGround = Mathf.Abs(transform.position.y - GameManager.GetInstance().terrain.transform.position.y);
-
-        // Find the highest color hit in a single frame, process the hit color as being struck
-        if(highestHitColor != TargetColor.Undefined)
-        {
-            if (framesSinceHit == 0)
-            {
-                switch (highestHitColor)
-                {
-                    case TargetColor.Black:
-                        GameManager.GetInstance().targetBoard.PlayBlackHit();
-                        break;
-
-                    case TargetColor.White:
-                        GameManager.GetInstance().targetBoard.PlayWhiteHit();
-                        break;
-
-                    case TargetColor.Blue:
-                        GameManager.GetInstance().targetBoard.PlayBlueHit();
-                        break;
-
-                    case TargetColor.Red:
-                        GameManager.GetInstance().targetBoard.PlayRedHit();
-                        break;
-
-                    case TargetColor.Yellow:
-                        GameManager.GetInstance().targetBoard.PlayYellowHit();
-                        break;
-                }
-            }
-
-            framesSinceHit++;
-        }
     }
 
     private void LateUpdate()
