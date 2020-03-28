@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Start Params")]
-    public List<GameObject> markers = new List<GameObject>();
     public GameObject terrain;
 
     private static GameManager instance;
@@ -159,21 +157,11 @@ public class GameManager : MonoBehaviour
             StopCoroutine(activeCoroutine);
         }
 
-        foreach(GameObject marker in markers)
-        {
-            Destroy(marker);
-        }
-        markers.Clear();
-
         foreach(ArrowIndicator arrow in vectorArrows)
         {
             Destroy(arrow.gameObject);
         }
         vectorArrows.Clear();
-
-        // Reset Camera view transform
-        mainCam.transform.position = catapult.startCamTransform.position;
-        mainCam.transform.rotation = catapult.startCamTransform.rotation;
 
         catapult.Reset();
         cannonBall.Reset();
@@ -198,7 +186,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitWhile(() => { return catapult.throwCalled; });
 
         float velocity = Velocity_At_Time_Of_Launch();
-        float ratio = ratio_Of_DEPE_Over_DGPE();
         catapult.ThrowBall(catapult.launchVector.up, velocity);
 
         activeCoroutine = null;
