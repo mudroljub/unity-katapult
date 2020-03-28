@@ -13,7 +13,6 @@ public class Catapult : MonoBehaviour
 
     public const float LAUNCH_SPEED_FREEPLAY = 5f;
     public float DEFAULT_LAUNCH_ANGLE = 45;
-    [SerializeField] private const float cannonBallWeight = 1f;
     public float launchSpeed = 0.5f;
 
     public float currentArmAngle = 0f;
@@ -28,7 +27,6 @@ public class Catapult : MonoBehaviour
 
     private void Awake()
     {
-        cannonBall.rigidBody.mass = cannonBallWeight;
         armInitRotation = catapultArm.transform.rotation;
     }
 
@@ -60,12 +58,11 @@ public class Catapult : MonoBehaviour
              if (currentArmAngle >= launchAngle)
              {
                 throwCalled = false;
-                cannonBall.transform.rotation = Quaternion.identity;
                 return;
              }
-
-            currentArmAngle += (Time.deltaTime * DEFAULT_LAUNCH_ANGLE) * launchSpeed;
-            catapultArm.transform.Rotate(-Vector3.up, (Time.deltaTime * DEFAULT_LAUNCH_ANGLE) * launchSpeed );
+            float total = Time.deltaTime * DEFAULT_LAUNCH_ANGLE * launchSpeed;
+             currentArmAngle += total;
+             catapultArm.transform.Rotate(-Vector3.up, total );
         }
     }
 }
