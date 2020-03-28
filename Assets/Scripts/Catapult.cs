@@ -30,7 +30,7 @@ public class Catapult : MonoBehaviour
     }
 
     private Quaternion armInitRotation;
-    [ReadOnly] public bool throwCalled = false;
+    public bool throwCalled = false;
     public bool launched = false;
 
     [Header("Internal References")]
