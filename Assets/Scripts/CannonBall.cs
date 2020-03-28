@@ -70,7 +70,6 @@ public class CannonBall : MonoBehaviour
         {
             mass = value;
             rigidBody.mass = mass;
-            //GameManager.GetInstance().CalculateDeltaTime();
         }
     }
 

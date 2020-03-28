@@ -21,27 +21,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] public Catapult catapult;
     [SerializeField] public CannonBall cannonBall;
 
-    [ReadOnly] [SerializeField] private float springK;
-
-    public float SpringK
-    {
-        get
-        {
-            return springK;
-        }
-        set
-        {
-            springK = value;
-        }
-    }
-
     #region Physics Formulas
 
     // Find the instantaneous velocity at the time of the cannonball's launch from the Catapault Arm
-    // Formula: √(springK / m) * angle² - (g * √2)
+    // Formula: √(springForce / m) * angle² - (g * √2)
     public float InitialVelocity()
     {
-        float velocity = Mathf.Sqrt(((springK / cannonBall.Mass) * Mathf.Pow((catapult.DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad), 2)) - (Physics.gravity.y * Mathf.Sqrt(2f)));
+        float velocity = Mathf.Sqrt(((springForce / cannonBall.Mass) * Mathf.Pow((catapult.DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad), 2)) - (Physics.gravity.y * Mathf.Sqrt(2f)));
         return velocity;
     }
 
@@ -85,10 +71,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator DoProcessFreePlayLaunch()
     {
         yield return new WaitWhile(() => { return catapult.throwCalled; });
-
-        float velocity = InitialVelocity();
-        catapult.ThrowBall(catapult.launchVector.up, velocity);
-
+        catapult.ThrowBall(catapult.launchVector.up, InitialVelocity());
         activeCoroutine = null;
     }
     #endregion
@@ -101,18 +84,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UpdateSpringForce(float _springK)
-    {
-        if (!springK.Equals(_springK))
-        {
-            SpringK = _springK;
-        }
-    }
-
     private void Update()
     {
         UpdateCannonBallMass(cannonBallMass);
-        UpdateSpringForce(springForce);
+        // TODO: move to catapult
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Reset();
