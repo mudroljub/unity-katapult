@@ -67,19 +67,6 @@ public class GameManager : MonoBehaviour
         return velocity;
     }
 
-    // Delta Time is equal to the Delta Vertical Velocity divided by the vertical acceleration (gravity)
-    // Formula: ((vVertF - vVertI) / g)
-    private float CalculateDeltaTime()
-    {
-        float velocity = Velocity_At_Time_Of_Launch();
-        float vertVelocity = velocity * Mathf.Cos(catapult.DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad);
-        float vI = vertVelocity;
-        float vF = -vertVelocity;
-        float deltaV = vF - vI;
-        float deltaTime = deltaV / Physics.gravity.y;
-        return deltaTime;
-    }
-
     // Force that is the combined Normal and Centrifugal force of the catapult spoon on the cannonball as the arm rises
     // Formula: (Nx+Cx, Ny+Cy)
     private Vector3 CalculateSVector()
