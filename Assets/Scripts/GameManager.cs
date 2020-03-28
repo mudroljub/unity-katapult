@@ -30,66 +30,17 @@ public class GameManager : MonoBehaviour
         set
         {
             springK = value;
-            Vector3 springVector = CalculateSVector();
         }
     }
 
     #region Physics Formulas
 
-    // The Elastic Potential Energy of the Cannonball as a result of the recoiled Catapult Arm 
-    // Formula: ( 0.5 * springK * angle² )
-    private float Delta_Elastic_Potential_Energy()
-    {
-        return 0.5f * SpringK * Mathf.Pow(catapult.DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad, 2);
-    }
-
-    // The difference of Gravitational Potential Energy 
-    // Formula: ( m * g * √2/2)
-    private float Delta_Gravitational_Potential_Energy()
-    {
-        return cannonBall.WeightForce * (Mathf.Sqrt(2) / 2f);
-    }
-
-    // The ratio of (Delta Elastic Potential Energy) over (Delta Gravitation Potential Energy)
-    // Formula: DEPE / DGPE
-    private float ratio_Of_DEPE_Over_DGPE()
-    {
-        float ratio = Delta_Elastic_Potential_Energy() / Delta_Gravitational_Potential_Energy();
-        return ratio;
-    }
-
     // Find the instantaneous velocity at the time of the cannonball's launch from the Catapault Arm
     // Formula: √(springK / m) * angle² - (g * √2)
-    public float Velocity_At_Time_Of_Launch()
+    public float InitialVelocity()
     {
         float velocity = Mathf.Sqrt(((springK / cannonBall.Mass) * Mathf.Pow((catapult.DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad), 2)) - (Physics.gravity.y * Mathf.Sqrt(2f)));
-
         return velocity;
-    }
-
-    // Force that is the combined Normal and Centrifugal force of the catapult spoon on the cannonball as the arm rises
-    // Formula: (Nx+Cx, Ny+Cy)
-    private Vector3 CalculateSVector()
-    {
-        return (NormalVector() + CentrifugalVector()) * new Vector3(-1, 1, 0); // Multiply x by -1 to horizontally flip the S Vector to the catapult's local orientation
-    }
-
-    // Spring Force vector that is perpendicular to the catapault arm (Force that acts on the cannonball from the catapult spoon as the arm rises)
-    private Vector2 NormalVector()
-    {
-        float angle = catapult.ArmAngleRadians;
-        Vector2 normalizedNormal = new Vector2(0, 1);   // Perpendicular 90 degrees to catapault arm
-
-        return normalizedNormal * ratio_Of_DEPE_Over_DGPE() * cannonBall.WeightForce * (1 - (2 * angle) / Mathf.PI);
-    }
-
-    // Centrifugal Force vector that is Parallel to Catapault arm (Force that keeps the cannonball horizontally in the spoon as the arm rises)
-    private Vector2 CentrifugalVector()
-    {
-        float angle = catapult.ArmAngleRadians;
-        Vector2 normalizedCentrifugal = new Vector2(1, 0);  // Parallel 0 degrees to catapault arm
-
-        return normalizedCentrifugal * (ratio_Of_DEPE_Over_DGPE() * cannonBall.WeightForce * ((2 * angle) / Mathf.PI));
     }
 
     #endregion
@@ -133,7 +84,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitWhile(() => { return catapult.throwCalled; });
 
-        float velocity = Velocity_At_Time_Of_Launch();
+        float velocity = InitialVelocity();
         catapult.ThrowBall(catapult.launchVector.up, velocity);
 
         activeCoroutine = null;
