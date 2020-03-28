@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ArrowIndicator springArrow;
     [SerializeField] private ArrowIndicator resultArrow;
     [SerializeField] private DistanceGizmo distanceGizmo;
-    [SerializeField] private EnergyIndicator energyWidget;
 
     [ReadOnly] [SerializeField] private Transform tensionPoint;
     [ReadOnly] [SerializeField] private Transform springPoint;
