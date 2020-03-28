@@ -113,5 +113,10 @@ public class GameManager : MonoBehaviour
     {
         UpdateCannonBallMass(cannonBallMass);
         UpdateSpringForce(springForce);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Reset();
+            LaunchFreePlayCannonBall();
+        }
     }
 }

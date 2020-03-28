@@ -68,14 +68,6 @@ public class Catapult : MonoBehaviour
         cannonBall.inAir = true;
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ThrowBall(defaultForce, defaultVelocity);
-        }
-    }
-
     private void LateUpdate()
     {
         if (throwCalled)
