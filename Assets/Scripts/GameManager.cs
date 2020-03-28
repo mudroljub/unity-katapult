@@ -6,6 +6,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject terrain;
+    public float cannonBallMass = 25f;
+    public float springForce = 15000f;
 
     private static GameManager instance;
 
@@ -107,4 +109,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        UpdateCannonBallMass(cannonBallMass);
+        UpdateSpringForce(springForce);
+    }
 }
