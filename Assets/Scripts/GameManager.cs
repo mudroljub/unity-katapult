@@ -16,16 +16,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] public Catapult catapult;
     [SerializeField] public CannonBall cannonBall;
 
-    // formula: √(springForce / m) * angle² - (g * √2)
-    public float InstantaneousVelocity()
-    {
-        float springForce = catapult.springForce;
-        float mass = cannonBall.rigidBody.mass;
-        float angle = catapult.DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad;
-        float velocity = Mathf.Sqrt(springForce / mass * Mathf.Pow(angle, 2) - Physics.gravity.y * Mathf.Sqrt(2f));
-        return velocity;
-    }
-
     private void Start()
     {
         Reset();
@@ -52,7 +42,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator DoProcessFreePlayLaunch()
     {
         yield return new WaitWhile(() => { return catapult.throwCalled; });
-        catapult.Launch(catapult.launchVector.up, InstantaneousVelocity());
+        catapult.Launch();
         activeCoroutine = null;
     }
     #endregion

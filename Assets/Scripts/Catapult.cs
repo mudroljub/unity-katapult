@@ -40,10 +40,19 @@ public class Catapult : MonoBehaviour
         cannonBall.SetPosition(catapultArm.transform, cannonBallPos.position);
     }
 
-    public void Launch(Vector3 forceVector, float velocity)
+    // formula: √(springForce / m) * angle² - (g * √2)
+    public float InstantaneousVelocity()
+    {
+        float mass = cannonBall.rigidBody.mass;
+        float angle = DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad;
+        float velocity = Mathf.Sqrt(springForce / mass * Mathf.Pow(angle, 2) - Physics.gravity.y * Mathf.Sqrt(2f));
+        return velocity;
+    }
+
+    public void Launch()
     {
         launched = true;
-        cannonBall.Launch(forceVector, velocity);
+        cannonBall.Launch(launchVector.up, InstantaneousVelocity());
     }
 
     private void Update()
