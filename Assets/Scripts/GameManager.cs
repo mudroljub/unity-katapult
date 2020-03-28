@@ -14,16 +14,11 @@ public class GameManager : MonoBehaviour
     [Header("Scene References")]
     public Camera mainCam;
     public Camera uiCam;
-    public Action OnEditorFocus;
-    public bool sliderLockOut = false;
 
     [SerializeField] private CubeWall cubeWall;
     [SerializeField] public Catapult catapult;
     [SerializeField] public CannonBall cannonBall;
-    [SerializeField] private ArrowIndicator gravArrow;
-    [SerializeField] private ArrowIndicator tensionArrow;
-    [SerializeField] private ArrowIndicator springArrow;
-    [SerializeField] private ArrowIndicator resultArrow;
+    //[SerializeField] private ArrowIndicator resultArrow;
     [SerializeField] private DistanceGizmo distanceGizmo;
 
     [ReadOnly] [SerializeField] private Transform tensionPoint;
@@ -149,8 +144,6 @@ public class GameManager : MonoBehaviour
 
     public void Reset()
     {
-        sliderLockOut = false;
-
         if(activeCoroutine != null)
         {
             StopCoroutine(activeCoroutine);
@@ -210,13 +203,11 @@ public class GameManager : MonoBehaviour
     // Show animation related to change of mass, also update opposing and like forces
     public void ShowMassChange()
     {
-        gravArrow.ChangeArrowWeight(cannonBall.WeightForce);
         CalculateDeltaTime();
     }
 
     public void ShowSpringChange()
     {
-        springArrow.ChangeArrowWeight(SpringForce);
         CalculateDeltaTime();
     }
 
