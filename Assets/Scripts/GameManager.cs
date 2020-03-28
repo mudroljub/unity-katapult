@@ -29,21 +29,19 @@ public class GameManager : MonoBehaviour
         cannonBall.Reset();
     }
 
-    public void LaunchFreePlayCannonBall()
+    public void LaunchCannonBall()
     {
         catapult.launchSpeed = Catapult.LAUNCH_SPEED;
         catapult.throwCalled = true;
-        activeCoroutine = StartCoroutine(DoProcessFreePlayLaunch());
+        activeCoroutine = StartCoroutine(DoProcessLaunch());
     }
 
-    #region FreePlay
-    public IEnumerator DoProcessFreePlayLaunch()
+    public IEnumerator DoProcessLaunch()
     {
         yield return new WaitWhile(() => { return catapult.throwCalled; });
         catapult.Launch();
         activeCoroutine = null;
     }
-    #endregion
 
     private void Update()
     {
@@ -51,7 +49,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Reset();
-            LaunchFreePlayCannonBall();
+            LaunchCannonBall();
         }
     }
 }
