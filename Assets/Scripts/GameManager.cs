@@ -18,16 +18,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CubeWall cubeWall;
     [SerializeField] public Catapult catapult;
     [SerializeField] public CannonBall cannonBall;
-    //[SerializeField] private ArrowIndicator resultArrow;
-    [SerializeField] private DistanceGizmo distanceGizmo;
-
-    [ReadOnly] [SerializeField] private Transform tensionPoint;
-    [ReadOnly] [SerializeField] private Transform springPoint;
-    [ReadOnly] [SerializeField] private Transform weightPoint;
-    [ReadOnly] [SerializeField] private Transform resultPoint;
-
-    public LayerMask terrainLayer;
-    [SerializeField] private List<ArrowIndicator> vectorArrows = new List<ArrowIndicator>();
 
     [ReadOnly] [SerializeField] private float springK;
     [ReadOnly] [SerializeField] private float springForce;
@@ -42,20 +32,6 @@ public class GameManager : MonoBehaviour
         {
             springK = value;
             Vector3 springVector = CalculateSVector();
-            SpringForce = springVector.magnitude;
-        }
-    }
-
-    public float SpringForce
-    {
-        get
-        {
-            return springForce;
-        }
-        set
-        {
-            springForce = value;
-            ShowSpringChange();
         }
     }
 
@@ -148,12 +124,6 @@ public class GameManager : MonoBehaviour
         {
             StopCoroutine(activeCoroutine);
         }
-
-        foreach(ArrowIndicator arrow in vectorArrows)
-        {
-            Destroy(arrow.gameObject);
-        }
-        vectorArrows.Clear();
 
         catapult.Reset();
         cannonBall.Reset();
