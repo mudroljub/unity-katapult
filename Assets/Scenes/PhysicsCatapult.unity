@@ -142,14 +142,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrain: {fileID: 1247680863}
-  cannonBallMass: 25
   springForce: 15000
   mainCam: {fileID: 534669904}
   uiCam: {fileID: 245567302}
   cubeWall: {fileID: 8378833687526306695}
   catapult: {fileID: 82447225}
   cannonBall: {fileID: 8181726659408217989}
-  springK: 600
 --- !u!4 &58954383
 Transform:
   m_ObjectHideFlags: 0
@@ -1239,6 +1237,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Constraints
       value: 126
+      objectReference: {fileID: 0}
+    - target: {fileID: 1791097534378764681, guid: 5d46ef5144bc5426ca33e8a5629799e8,
+        type: 3}
+      propertyPath: m_Mass
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 5575915105298703423, guid: 5d46ef5144bc5426ca33e8a5629799e8,
         type: 3}

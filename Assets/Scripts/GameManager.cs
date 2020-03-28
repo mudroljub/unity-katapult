@@ -6,7 +6,6 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject terrain;
-    public float cannonBallMass = 25f;
     public float springForce = 15000f;
 
     private static GameManager instance;
@@ -23,11 +22,11 @@ public class GameManager : MonoBehaviour
 
     #region Physics Formulas
 
-    // Find the instantaneous velocity at the time of the cannonball's launch from the Catapault Arm
+    // Find the instantaneous velocity at the time of the cannonball's launch
     // Formula: √(springForce / m) * angle² - (g * √2)
     public float InitialVelocity()
     {
-        float velocity = Mathf.Sqrt(((springForce / cannonBall.Mass) * Mathf.Pow((catapult.DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad), 2)) - (Physics.gravity.y * Mathf.Sqrt(2f)));
+        float velocity = Mathf.Sqrt(((springForce / cannonBall.rigidBody.mass) * Mathf.Pow((catapult.DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad), 2)) - (Physics.gravity.y * Mathf.Sqrt(2f)));
         return velocity;
     }
 
@@ -76,17 +75,8 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public void UpdateCannonBallMass(float _mass)
-    {
-        if (!cannonBall.Mass.Equals(_mass))
-        {
-            cannonBall.Mass = _mass;
-        }
-    }
-
     private void Update()
     {
-        UpdateCannonBallMass(cannonBallMass);
         // TODO: move to catapult
         if (Input.GetKeyDown(KeyCode.Space))
         {

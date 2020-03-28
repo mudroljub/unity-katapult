@@ -30,7 +30,6 @@ public class CannonBall : MonoBehaviour
 
     int framesSinceHit = 0;
 
-    [ReadOnly] [SerializeField] private float mass = 30;
     public bool PlayTargetHitEffect = false;
 
     public enum TargetColor
@@ -48,7 +47,7 @@ public class CannonBall : MonoBehaviour
     // Calculate Gravitational Potential Energy (m * g * h) -> mass x gravity x height
     public float Gravitational_Potential_Energy()
     {
-        return Mathf.Abs((float)Math.Round(mass * Physics.gravity.y * heightFromGround, 2));
+        return Mathf.Abs((float)Math.Round(rigidBody.mass * Physics.gravity.y * heightFromGround, 2));
     }
 
     // Weight of the Cannonball in Neutons (mass x gravity)
@@ -56,21 +55,13 @@ public class CannonBall : MonoBehaviour
     {
         get
         {
-            return Mathf.Abs(Mathf.Round(mass * Physics.gravity.y));  // return the rounded Absolute value of the the Cannon Balls Weight in Force Newtons
+            return Mathf.Abs(Mathf.Round(rigidBody.mass * Physics.gravity.y));  // return the rounded Absolute value of the the Cannon Balls Weight in Force Newtons
         }
     }
 
-    public float Mass
+    void Start()
     {
-        get
-        {
-            return mass;
-        }
-        set
-        {
-            mass = value;
-            rigidBody.mass = mass;
-        }
+        rigidBody.mass = 20f;
     }
 
     public void PauseInAir()

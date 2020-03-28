@@ -64,7 +64,7 @@ public class Catapult : MonoBehaviour
         cannonBall.transform.SetParent(null);
         cannonBall.rigidBody.constraints = RigidbodyConstraints.None;
         //cannonBall.rigidBody.useGravity = true;
-        cannonBall.rigidBody.AddForce(forceVector * (velocity * cannonBall.Mass), ForceMode.Impulse);
+        cannonBall.rigidBody.AddForce(forceVector * (velocity * cannonBall.rigidBody.mass), ForceMode.Impulse);
         cannonBall.inAir = true;
     }
 
@@ -81,7 +81,6 @@ public class Catapult : MonoBehaviour
 
             currentArmAngle += (Time.deltaTime * DEFAULT_LAUNCH_ANGLE) * launchSpeed;
             catapultArm.transform.Rotate(-Vector3.up, (Time.deltaTime * DEFAULT_LAUNCH_ANGLE) * launchSpeed );
-            //cannonBall.transform.rotation = Quaternion.identity;
         }
     }
 }
