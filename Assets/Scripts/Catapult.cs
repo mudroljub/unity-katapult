@@ -2,6 +2,7 @@
 
 public class Catapult : MonoBehaviour
 {
+    public float springForce = 15000f;
     public Vector3 defaultForce = new Vector3(-0.8f, 0.6f, 0.0f);
     public float defaultVelocity = 13f;
 

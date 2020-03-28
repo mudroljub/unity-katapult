@@ -10,14 +10,10 @@ public class CubeWall : MonoBehaviour
     public Transform leftRaycaster;
     public Transform rightRaycaster;
     public LayerMask boxLayer;
-    private int TotalKnockableBoxes;
 
     // Store all box locations in the cubewall
     private void Awake()
     {
-        // ShowCenterRowOnly();
-        TotalKnockableBoxes = middleRowBoxes.Count;
-
         foreach(Transform child in transform)
         {
             if (child.gameObject.tag == "cube")

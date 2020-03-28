@@ -6,10 +6,6 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject terrain;
-    public float springForce = 15000f;
-
-    private static GameManager instance;
-
     Coroutine activeCoroutine;
 
     [Header("Scene References")]
@@ -20,21 +16,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] public Catapult catapult;
     [SerializeField] public CannonBall cannonBall;
 
-    #region Physics Formulas
-
-    // Find the instantaneous velocity at the time of the cannonball's launch
-    // Formula: √(springForce / m) * angle² - (g * √2)
-    public float InitialVelocity()
+    // formula: √(springForce / m) * angle² - (g * √2)
+    public float InstantaneousVelocity()
     {
-        float velocity = Mathf.Sqrt(((springForce / cannonBall.rigidBody.mass) * Mathf.Pow((catapult.DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad), 2)) - (Physics.gravity.y * Mathf.Sqrt(2f)));
+        float springForce = catapult.springForce;
+        float mass = cannonBall.rigidBody.mass;
+        float angle = catapult.DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad;
+        float velocity = Mathf.Sqrt(springForce / mass * Mathf.Pow(angle, 2) - Physics.gravity.y * Mathf.Sqrt(2f));
         return velocity;
-    }
-
-    #endregion
-
-    private void Awake()
-    {
-        instance = this;
     }
 
     private void Start()
@@ -48,15 +37,8 @@ public class GameManager : MonoBehaviour
         {
             StopCoroutine(activeCoroutine);
         }
-
         catapult.Reset();
         cannonBall.Reset();
-        cubeWall.Reset();
-    }
-
-    public static GameManager GetInstance()
-    {
-        return instance;
     }
 
     public void LaunchFreePlayCannonBall()
@@ -70,7 +52,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator DoProcessFreePlayLaunch()
     {
         yield return new WaitWhile(() => { return catapult.throwCalled; });
-        catapult.ThrowBall(catapult.launchVector.up, InitialVelocity());
+        catapult.ThrowBall(catapult.launchVector.up, InstantaneousVelocity());
         activeCoroutine = null;
     }
     #endregion
