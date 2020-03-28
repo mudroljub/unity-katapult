@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] public CannonBall cannonBall;
 
     [ReadOnly] [SerializeField] private float springK;
-    [ReadOnly] [SerializeField] private float springForce;
 
     public float SpringK
     {
@@ -168,17 +167,6 @@ public class GameManager : MonoBehaviour
         {
             SpringK = _springK;
         }
-    }
-
-    // Show animation related to change of mass, also update opposing and like forces
-    public void ShowMassChange()
-    {
-        CalculateDeltaTime();
-    }
-
-    public void ShowSpringChange()
-    {
-        CalculateDeltaTime();
     }
 
 }
