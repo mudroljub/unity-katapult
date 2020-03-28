@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*
+- ispaljuje na puštanje dugmeta, od dužine držanja zavisi snaga
+- okretanje levo desno
+*/
+using UnityEngine;
 
 public class Catapult : MonoBehaviour
 {
@@ -11,7 +15,7 @@ public class Catapult : MonoBehaviour
     public Transform launchVector;
     public GameObject rope;
 
-    public const float LAUNCH_SPEED_FREEPLAY = 5f;
+    public const float LAUNCH_SPEED = 5f;
     public float DEFAULT_LAUNCH_ANGLE = 45;
     public float launchSpeed = 0.5f;
 

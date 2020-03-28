@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -33,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     public void LaunchFreePlayCannonBall()
     {
-        catapult.launchSpeed = Catapult.LAUNCH_SPEED_FREEPLAY;
+        catapult.launchSpeed = Catapult.LAUNCH_SPEED;
         catapult.throwCalled = true;
         activeCoroutine = StartCoroutine(DoProcessFreePlayLaunch());
     }
