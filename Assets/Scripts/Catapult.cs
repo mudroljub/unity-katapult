@@ -48,16 +48,17 @@ public class Catapult : MonoBehaviour
 
     private void Update()
     {
-        if (throwCalled)
+        if (!throwCalled)
         {
-             if (currentArmAngle >= launchAngle)
-             {
-                throwCalled = false;
-                return;
-             }
-            float total = Time.deltaTime * DEFAULT_LAUNCH_ANGLE * launchSpeed;
-             currentArmAngle += total;
-             catapultArm.transform.Rotate(-Vector3.up, total );
+            return;
+        };
+        if (currentArmAngle >= launchAngle)
+        {
+            throwCalled = false;
+            return;
         }
+        float total = Time.deltaTime * DEFAULT_LAUNCH_ANGLE * launchSpeed;
+        currentArmAngle += total;
+        catapultArm.transform.Rotate(-Vector3.up, total);
     }
 }
