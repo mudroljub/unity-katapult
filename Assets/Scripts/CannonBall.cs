@@ -17,10 +17,10 @@ public class CannonBall : MonoBehaviour
         rigidBody.drag = 0;
     }
 
-    public void SetPosition(GameObject catapultArm, Vector3 position)
+    public void SetPosition(Transform armTransform, Vector3 position)
     {
         rigidBody.constraints = RigidbodyConstraints.FreezeAll;
-        transform.parent = catapultArm.transform;
+        transform.parent = armTransform;
         transform.position = position;
     }
 

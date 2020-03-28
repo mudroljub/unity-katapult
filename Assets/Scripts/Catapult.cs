@@ -37,7 +37,7 @@ public class Catapult : MonoBehaviour
         currentArmAngle = 0;
         rope.SetActive(true);
         catapultArm.transform.rotation = armInitRotation;
-        cannonBall.SetPosition(catapultArm, cannonBallPos.position);
+        cannonBall.SetPosition(catapultArm.transform, cannonBallPos.position);
     }
 
     public void ThrowBall(Vector3 forceVector, float velocity)
