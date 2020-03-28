@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class CubeWall : MonoBehaviour
@@ -7,11 +6,7 @@ public class CubeWall : MonoBehaviour
     public List<Rigidbody> boxRigidBodies = new List<Rigidbody>();
     public Dictionary<Transform, Vector3> cubeWallPositions = new Dictionary<Transform, Vector3>();
     public List<GameObject> middleRowBoxes = new List<GameObject>();
-    public Transform leftRaycaster;
-    public Transform rightRaycaster;
-    public LayerMask boxLayer;
 
-    // Store all box locations in the cubewall
     private void Awake()
     {
         foreach(Transform child in transform)
@@ -23,30 +18,22 @@ public class CubeWall : MonoBehaviour
         }
     }
 
+    // reset all boxes to initial positions
     public void Reset()
     {
-        foreach(KeyValuePair<Transform, Vector3> kpvCube in cubeWallPositions)
+        foreach(KeyValuePair<Transform, Vector3> pos in cubeWallPositions)
         {
-            kpvCube.Key.position = kpvCube.Value;
-            kpvCube.Key.rotation = Quaternion.identity;
-            Rigidbody rigidBody = kpvCube.Key.GetComponent<Rigidbody>();
+            pos.Key.position = pos.Value;
+            pos.Key.rotation = Quaternion.identity;
+            Rigidbody rigidBody = pos.Key.GetComponent<Rigidbody>();
             rigidBody.velocity = Vector3.zero;
             rigidBody.angularVelocity = Vector3.zero;
         }
     }
 
-    public void SetKinematic(bool enabled)
-    {
-        foreach(Rigidbody rigidBody in boxRigidBodies)
-        {
-            rigidBody.isKinematic = enabled;
-        }
-    }
-
     public void ShowCenterRowOnly()
     {
-        Reset(); // reset all boxes back to initial positions
-
+        Reset();
         // Hide all boxes first
         foreach (Rigidbody rigidBody in boxRigidBodies)
         {
@@ -61,7 +48,6 @@ public class CubeWall : MonoBehaviour
 
     public void ShowAllBoxes()
     {
-        // Show all boxes
         foreach (Rigidbody rigidBody in boxRigidBodies)
         {
             rigidBody.gameObject.SetActive(true);
