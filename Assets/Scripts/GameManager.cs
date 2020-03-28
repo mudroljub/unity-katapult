@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     public IEnumerator DoProcessFreePlayLaunch()
     {
         yield return new WaitWhile(() => { return catapult.throwCalled; });
-        catapult.ThrowBall(catapult.launchVector.up, InstantaneousVelocity());
+        catapult.Launch(catapult.launchVector.up, InstantaneousVelocity());
         activeCoroutine = null;
     }
     #endregion

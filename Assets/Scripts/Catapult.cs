@@ -40,13 +40,10 @@ public class Catapult : MonoBehaviour
         cannonBall.SetPosition(catapultArm.transform, cannonBallPos.position);
     }
 
-    public void ThrowBall(Vector3 forceVector, float velocity)
+    public void Launch(Vector3 forceVector, float velocity)
     {
         launched = true;
-        cannonBall.transform.SetParent(null);
-        cannonBall.rigidBody.constraints = RigidbodyConstraints.None;
-        cannonBall.rigidBody.AddForce(forceVector * (velocity * cannonBall.rigidBody.mass), ForceMode.Impulse);
-        cannonBall.inAir = true;
+        cannonBall.Launch(forceVector, velocity);
     }
 
     private void Update()

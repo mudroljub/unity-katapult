@@ -24,6 +24,14 @@ public class CannonBall : MonoBehaviour
         transform.position = position;
     }
 
+    public void Launch(Vector3 forceVector, float velocity)
+    {
+        transform.SetParent(null);
+        rigidBody.constraints = RigidbodyConstraints.None;
+        rigidBody.AddForce(forceVector * (velocity * rigidBody.mass), ForceMode.Impulse);
+        inAir = true;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         switch (collision.gameObject.tag)
