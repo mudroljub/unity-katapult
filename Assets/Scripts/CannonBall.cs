@@ -17,6 +17,13 @@ public class CannonBall : MonoBehaviour
         rigidBody.drag = 0;
     }
 
+    public void SetPosition(GameObject catapultArm, Transform cannonBallPos)
+    {
+        rigidBody.constraints = RigidbodyConstraints.FreezeAll;
+        transform.parent = catapultArm.transform;
+        transform.position = cannonBallPos.position;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         switch (collision.gameObject.tag)

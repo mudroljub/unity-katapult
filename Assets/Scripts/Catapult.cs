@@ -34,12 +34,10 @@ public class Catapult : MonoBehaviour
     {
         launched = throwCalled = false;
         launchAngle = DEFAULT_LAUNCH_ANGLE;
-        rope.SetActive(true);
         currentArmAngle = 0;
-        cannonBall.rigidBody.constraints = RigidbodyConstraints.FreezeAll;
-        cannonBall.transform.parent = catapultArm.transform;
-        cannonBall.transform.position = cannonBallPos.position;
+        rope.SetActive(true);
         catapultArm.transform.rotation = armInitRotation;
+        cannonBall.SetPosition(catapultArm, cannonBallPos);
     }
 
     public void ThrowBall(Vector3 forceVector, float velocity)
