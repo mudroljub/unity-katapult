@@ -1,16 +1,18 @@
 ﻿/*
- * okretanje levo desno
  * da ne nestaje djule
+ * da katapult ima koliziju
 */
 using UnityEngine;
 using System.Collections;
 
 public class Catapult : MonoBehaviour
 {
-    public float springForce = 8000;
+    public float springForce = 5000;
     public float launchSpeed = 10f;
     public float rotationSpeed = 15f;
     public float speed = 1f;
+    public float maxAngle = 315;
+    public float minAngle = 272;
 
     public CannonBall cannonBall;
     public GameObject catapultArm;
@@ -21,14 +23,11 @@ public class Catapult : MonoBehaviour
 
     public bool launching = false;
     public bool lowering = false;
-    private float initialForce;
- 
-    private Quaternion armInitRotation;
+    private float initialForce; 
     private Coroutine activeCoroutine;
 
     void Start()
     {
-        armInitRotation = catapultArm.transform.rotation;
         initialForce = springForce;
         Reset();
     }
@@ -43,10 +42,9 @@ public class Catapult : MonoBehaviour
 
     float InstantaneousVelocity()
     {
-        float launchAngle = 45; // TODO: izvesti vrednost iz trenutnog ugla
+        float launchAngle = catapultArm.transform.rotation.eulerAngles.x - 270;
         float mass = cannonBall.rigidBody.mass;
         float angle = launchAngle * Mathf.Deg2Rad;
-        // √(springForce / m) * angle² - (g * √2)
         return Mathf.Sqrt(springForce / mass * Mathf.Pow(angle, 2) - Physics.gravity.y * Mathf.Sqrt(2f));
     }
 
@@ -70,7 +68,7 @@ public class Catapult : MonoBehaviour
 
     void MoveArmUp()
     {
-        if (catapultArm.transform.rotation.eulerAngles.x >= 320)
+        if (catapultArm.transform.rotation.eulerAngles.x >= maxAngle)
         {
             launching = false;
             return;
@@ -82,8 +80,7 @@ public class Catapult : MonoBehaviour
 
     void MoveArmDown()
     {
-        Debug.Log(catapultArm.transform.rotation.eulerAngles.x);
-        if (catapultArm.transform.rotation.eulerAngles.x <= 272)
+        if (catapultArm.transform.rotation.eulerAngles.x <= minAngle)
         {
             lowering = false;
             return;
