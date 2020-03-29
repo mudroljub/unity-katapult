@@ -487,6 +487,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1249018328 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1045279248778006741, guid: 1066767f1113549128cd0af3e436ecac,
+    type: 3}
+  m_PrefabInstance: {fileID: 1302573196}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1302573196
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -569,6 +575,11 @@ PrefabInstance:
       propertyPath: launchSpeed
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6125033089482099525, guid: 1066767f1113549128cd0af3e436ecac,
+        type: 3}
+      propertyPath: launchVector
+      value: 
+      objectReference: {fileID: 1249018328}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1066767f1113549128cd0af3e436ecac, type: 3}
 --- !u!1001 &8181726659408217983
@@ -588,6 +599,11 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 4988364045970233134, guid: 5d46ef5144bc5426ca33e8a5629799e8,
+        type: 3}
+      propertyPath: launchVector
+      value: 
+      objectReference: {fileID: 1249018328}
     - target: {fileID: 5575915105298703423, guid: 5d46ef5144bc5426ca33e8a5629799e8,
         type: 3}
       propertyPath: m_Name

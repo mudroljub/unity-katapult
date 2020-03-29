@@ -268,15 +268,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   springForce: 15000
-  defaultForce: {x: -0.8, y: 0.6, z: 0}
-  defaultVelocity: 13
+  launchAngle: 45
+  launchSpeed: 10
   cannonBall: {fileID: 0}
   catapultArm: {fileID: 6102999836112596515}
-  launchVector: {fileID: 1045279248778006741}
-  launchAngle: 45
-  currentArmAngle: 0
-  ballLaunched: 0
-  launched: 0
   cannonBallPos: {fileID: 1165380397395625890}
 --- !u!1 &6102999836112596519
 GameObject:
