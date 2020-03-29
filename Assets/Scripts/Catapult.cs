@@ -19,9 +19,8 @@ public class Catapult : MonoBehaviour
     public Transform launchVector;
 
     private float currentArmAngle = 0f;
-    private bool ballLaunched = false;
-    private bool launched = false;
-
+    private bool launching = false;
+ 
     private Quaternion armInitRotation;
     private Coroutine activeCoroutine;
 
@@ -34,7 +33,7 @@ public class Catapult : MonoBehaviour
     void Reset()
     {
         if (activeCoroutine != null) StopCoroutine(activeCoroutine);
-        launched = ballLaunched = false;
+        launching = false;
         currentArmAngle = 0;
         catapultArm.transform.rotation = armInitRotation;
         cannonBall.Reset(catapultArm.transform, cannonBallPos.position);
@@ -44,27 +43,39 @@ public class Catapult : MonoBehaviour
     {
         float mass = cannonBall.rigidBody.mass;
         float angle = launchAngle * Mathf.Deg2Rad;
-        // formula: √(springForce / m) * angle² - (g * √2)
+        // √(springForce / m) * angle² - (g * √2)
         return Mathf.Sqrt(springForce / mass * Mathf.Pow(angle, 2) - Physics.gravity.y * Mathf.Sqrt(2f));
     }
 
     public void Launch()
     {
-        launched = true;
         cannonBall.Launch(launchVector.up, InstantaneousVelocity());
     }
 
     public IEnumerator DoProcessLaunch()
     {
-        yield return new WaitWhile(() => ballLaunched);
+        yield return new WaitWhile(() => launching);
         Launch();
         activeCoroutine = null;
     }
 
     public void LaunchCannonBall()
     {
-        ballLaunched = true;
+        launching = true;
         activeCoroutine = StartCoroutine(DoProcessLaunch());
+    }
+
+    void MoveArm()
+    {
+        if (currentArmAngle >= launchAngle)
+        {
+            launching = false;
+            return;
+        }
+
+        float total = Time.deltaTime * launchAngle * launchSpeed;
+        currentArmAngle += total;
+        catapultArm.transform.Rotate(-Vector3.up, total);
     }
 
     void Update()
@@ -74,18 +85,6 @@ public class Catapult : MonoBehaviour
             Reset();
             LaunchCannonBall();
         }
-
-        if (ballLaunched)
-        {
-            if (currentArmAngle >= launchAngle)
-            {
-                ballLaunched = false;
-                return;
-            }
-
-            float total = Time.deltaTime * launchAngle * launchSpeed;
-            currentArmAngle += total;
-            catapultArm.transform.Rotate(-Vector3.up, total);
-        };
+        if (launching) MoveArm();
     }
 }
