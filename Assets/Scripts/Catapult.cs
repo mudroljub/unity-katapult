@@ -1,6 +1,7 @@
 ﻿/*
  * da ne nestaje djule
  * da katapult ima koliziju
+ * da se vrte točkovi
 */
 using UnityEngine;
 using System.Collections;
