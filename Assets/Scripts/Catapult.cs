@@ -3,6 +3,7 @@
 - okretanje levo desno
 */
 using UnityEngine;
+using System.Collections;
 
 public class Catapult : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class Catapult : MonoBehaviour
     private Quaternion armInitRotation;
     public bool throwCalled = false;
     public bool launched = false;
+    Coroutine activeCoroutine;
 
     [Header("Internal References")]
     public Transform cannonBallPos;
@@ -32,6 +34,21 @@ public class Catapult : MonoBehaviour
     private void Awake()
     {
         armInitRotation = catapultArm.transform.rotation;
+    }
+
+    private void Start()
+    {
+        GameReset();
+    }
+
+    public void GameReset()
+    {
+        if (activeCoroutine != null)
+        {
+            StopCoroutine(activeCoroutine);
+        }
+        Reset();
+        cannonBall.Reset();
     }
 
     public void Reset()
@@ -59,8 +76,28 @@ public class Catapult : MonoBehaviour
         cannonBall.Launch(launchVector.up, InstantaneousVelocity());
     }
 
+    public IEnumerator DoProcessLaunch()
+    {
+        yield return new WaitWhile(() => throwCalled);
+        Launch();
+        activeCoroutine = null;
+    }
+
+    public void LaunchCannonBall()
+    {
+        launchSpeed = LAUNCH_SPEED;
+        throwCalled = true;
+        activeCoroutine = StartCoroutine(DoProcessLaunch());
+    }
+
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GameReset();
+            LaunchCannonBall();
+        }
+
         if (!throwCalled)
         {
             return;
@@ -70,6 +107,7 @@ public class Catapult : MonoBehaviour
             throwCalled = false;
             return;
         }
+
         float total = Time.deltaTime * DEFAULT_LAUNCH_ANGLE * launchSpeed;
         currentArmAngle += total;
         catapultArm.transform.Rotate(-Vector3.up, total);
