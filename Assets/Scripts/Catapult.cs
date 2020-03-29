@@ -1,6 +1,6 @@
 ﻿/*
-- ispaljuje na puštanje dugmeta, od dužine držanja zavisi snaga
 - okretanje levo desno
+- da ne nestaje djule
 */
 using UnityEngine;
 using System.Collections;
@@ -10,6 +10,7 @@ public class Catapult : MonoBehaviour
     public float springForce = 15000f;
     public float launchAngle = 45;
     public float launchSpeed = 10f;
+    public float rotationSpeed = 1f;
 
     public CannonBall cannonBall;
     public GameObject catapultArm;
@@ -18,8 +19,9 @@ public class Catapult : MonoBehaviour
     public Transform cannonBallPos;
     public Transform launchVector;
 
-    private float currentArmAngle = 0f;
-    private bool launching = false;
+    private float currentArmAngle = 45f;
+    public bool launching = false;
+    public bool lowering = false;
     private float initialForce;
  
     private Quaternion armInitRotation;
@@ -35,9 +37,7 @@ public class Catapult : MonoBehaviour
     void Reset()
     {
         if (activeCoroutine != null) StopCoroutine(activeCoroutine);
-        launching = false;
-        currentArmAngle = 0;
-        catapultArm.transform.rotation = armInitRotation;
+        //launching = false;
         springForce = initialForce;
         cannonBall.Reset(catapultArm.transform, cannonBallPos.position);
     }
@@ -76,9 +76,22 @@ public class Catapult : MonoBehaviour
             return;
         }
 
-        float step = Time.deltaTime * launchAngle * launchSpeed;
+        float step = Time.deltaTime * 500;
         currentArmAngle += step;
         catapultArm.transform.Rotate(-Vector3.up, step);
+    }
+
+    void MoveArmDown()
+    {
+        if (currentArmAngle <= 0)
+        {
+            lowering = false;
+            return;
+        }
+
+        float step = Time.deltaTime * 50;
+        currentArmAngle -= step;
+        catapultArm.transform.Rotate(-Vector3.down, step);
     }
 
     void Update()
@@ -86,6 +99,7 @@ public class Catapult : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Reset();
+            lowering = true;
         }
         if (Input.GetKey(KeyCode.Space))
         {
@@ -94,7 +108,13 @@ public class Catapult : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space))
         {
             LaunchCannonBall();
+            lowering = false;
         }
+
+        float rotation = Input.GetAxis("Horizontal") * rotationSpeed;
+        transform.Rotate(0, rotation, 0);
+
         if (launching) MoveArmUp();
+        if (lowering) MoveArmDown();
     }
 }
