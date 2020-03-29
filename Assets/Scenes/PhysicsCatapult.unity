@@ -334,7 +334,6 @@ GameObject:
   m_Component:
   - component: {fileID: 534669905}
   - component: {fileID: 534669904}
-  - component: {fileID: 534669903}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: Untagged
@@ -342,14 +341,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &534669903
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 534669902}
-  m_Enabled: 1
 --- !u!20 &534669904
 Camera:
   m_ObjectHideFlags: 0
@@ -505,6 +496,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: Catapult
       objectReference: {fileID: 0}
+    - target: {fileID: 6102999836112826883, guid: 1066767f1113549128cd0af3e436ecac,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.6507382
+      objectReference: {fileID: 0}
+    - target: {fileID: 6102999836112826883, guid: 1066767f1113549128cd0af3e436ecac,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.2981582
+      objectReference: {fileID: 0}
+    - target: {fileID: 6102999836112826883, guid: 1066767f1113549128cd0af3e436ecac,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.2991874
+      objectReference: {fileID: 0}
+    - target: {fileID: 6102999836112826883, guid: 1066767f1113549128cd0af3e436ecac,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.63097423
+      objectReference: {fileID: 0}
+    - target: {fileID: 6102999836112826883, guid: 1066767f1113549128cd0af3e436ecac,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -140
+      objectReference: {fileID: 0}
     - target: {fileID: 6102999836112826885, guid: 1066767f1113549128cd0af3e436ecac,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -580,6 +596,16 @@ PrefabInstance:
       propertyPath: launchVector
       value: 
       objectReference: {fileID: 1249018328}
+    - target: {fileID: 6125033089482099525, guid: 1066767f1113549128cd0af3e436ecac,
+        type: 3}
+      propertyPath: springForce
+      value: 8000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6125033089482099525, guid: 1066767f1113549128cd0af3e436ecac,
+        type: 3}
+      propertyPath: rotationSpeed
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1066767f1113549128cd0af3e436ecac, type: 3}
 --- !u!1001 &8181726659408217983
