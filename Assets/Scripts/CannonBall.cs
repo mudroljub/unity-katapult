@@ -10,15 +10,11 @@ public class CannonBall : MonoBehaviour
         rigidBody.mass = 20f;
     }
 
-    public void Reset()
+    public void Reset(Transform armTransform, Vector3 position)
     {
         inAir = false;
         rigidBody.useGravity = true;
         rigidBody.drag = 0;
-    }
-
-    public void SetPosition(Transform armTransform, Vector3 position)
-    {
         rigidBody.constraints = RigidbodyConstraints.FreezeAll;
         transform.parent = armTransform;
         transform.position = position;

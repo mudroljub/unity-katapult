@@ -14,60 +14,40 @@ public class Catapult : MonoBehaviour
     public CannonBall cannonBall;
     public GameObject catapultArm;
     public Transform launchVector;
-    public GameObject rope;
 
-    public const float LAUNCH_SPEED = 5f;
-    public float DEFAULT_LAUNCH_ANGLE = 45;
-    public float launchSpeed = 0.5f;
-
+    public const float launchSpeed = 5f;
+    public float launchAngle = 45;
     public float currentArmAngle = 0f;
-    public float launchAngle;
 
-    private Quaternion armInitRotation;
-    public bool throwCalled = false;
+    public bool ballLaunched = false;
     public bool launched = false;
+    Quaternion armInitRotation;
     Coroutine activeCoroutine;
 
     [Header("Internal References")]
     public Transform cannonBallPos;
 
-    private void Awake()
+    void Start()
     {
         armInitRotation = catapultArm.transform.rotation;
-    }
-
-    private void Start()
-    {
-        GameReset();
-    }
-
-    public void GameReset()
-    {
-        if (activeCoroutine != null)
-        {
-            StopCoroutine(activeCoroutine);
-        }
         Reset();
-        cannonBall.Reset();
     }
 
-    public void Reset()
+    void Reset()
     {
-        launched = throwCalled = false;
-        launchAngle = DEFAULT_LAUNCH_ANGLE;
+        if (activeCoroutine != null) StopCoroutine(activeCoroutine);
+        launched = ballLaunched = false;
         currentArmAngle = 0;
-        rope.SetActive(true);
         catapultArm.transform.rotation = armInitRotation;
-        cannonBall.SetPosition(catapultArm.transform, cannonBallPos.position);
+        cannonBall.Reset(catapultArm.transform, cannonBallPos.position);
     }
 
-    // formula: √(springForce / m) * angle² - (g * √2)
-    public float InstantaneousVelocity()
+    float InstantaneousVelocity()
     {
         float mass = cannonBall.rigidBody.mass;
-        float angle = DEFAULT_LAUNCH_ANGLE * Mathf.Deg2Rad;
-        float velocity = Mathf.Sqrt(springForce / mass * Mathf.Pow(angle, 2) - Physics.gravity.y * Mathf.Sqrt(2f));
-        return velocity;
+        float angle = launchAngle * Mathf.Deg2Rad;
+        // formula: √(springForce / m) * angle² - (g * √2)
+        return Mathf.Sqrt(springForce / mass * Mathf.Pow(angle, 2) - Physics.gravity.y * Mathf.Sqrt(2f));
     }
 
     public void Launch()
@@ -78,38 +58,36 @@ public class Catapult : MonoBehaviour
 
     public IEnumerator DoProcessLaunch()
     {
-        yield return new WaitWhile(() => throwCalled);
+        yield return new WaitWhile(() => ballLaunched);
         Launch();
         activeCoroutine = null;
     }
 
     public void LaunchCannonBall()
     {
-        launchSpeed = LAUNCH_SPEED;
-        throwCalled = true;
+        ballLaunched = true;
         activeCoroutine = StartCoroutine(DoProcessLaunch());
     }
 
-    private void Update()
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            GameReset();
+            Reset();
             LaunchCannonBall();
         }
 
-        if (!throwCalled)
+        if (ballLaunched)
         {
-            return;
-        };
-        if (currentArmAngle >= launchAngle)
-        {
-            throwCalled = false;
-            return;
-        }
+            if (currentArmAngle >= launchAngle)
+            {
+                ballLaunched = false;
+                return;
+            }
 
-        float total = Time.deltaTime * DEFAULT_LAUNCH_ANGLE * launchSpeed;
-        currentArmAngle += total;
-        catapultArm.transform.Rotate(-Vector3.up, total);
+            float total = Time.deltaTime * launchAngle * launchSpeed;
+            currentArmAngle += total;
+            catapultArm.transform.Rotate(-Vector3.up, total);
+        };
     }
 }
