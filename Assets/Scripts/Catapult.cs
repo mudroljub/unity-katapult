@@ -20,6 +20,7 @@ public class Catapult : MonoBehaviour
 
     private float currentArmAngle = 0f;
     private bool launching = false;
+    private float initialForce;
  
     private Quaternion armInitRotation;
     private Coroutine activeCoroutine;
@@ -27,6 +28,7 @@ public class Catapult : MonoBehaviour
     void Start()
     {
         armInitRotation = catapultArm.transform.rotation;
+        initialForce = springForce;
         Reset();
     }
 
@@ -36,6 +38,7 @@ public class Catapult : MonoBehaviour
         launching = false;
         currentArmAngle = 0;
         catapultArm.transform.rotation = armInitRotation;
+        springForce = initialForce;
         cannonBall.Reset(catapultArm.transform, cannonBallPos.position);
     }
 
@@ -47,25 +50,25 @@ public class Catapult : MonoBehaviour
         return Mathf.Sqrt(springForce / mass * Mathf.Pow(angle, 2) - Physics.gravity.y * Mathf.Sqrt(2f));
     }
 
-    public void Launch()
+    void Launch()
     {
         cannonBall.Launch(launchVector.up, InstantaneousVelocity());
     }
 
-    public IEnumerator DoProcessLaunch()
+    IEnumerator DoProcessLaunch()
     {
         yield return new WaitWhile(() => launching);
         Launch();
         activeCoroutine = null;
     }
 
-    public void LaunchCannonBall()
+    void LaunchCannonBall()
     {
         launching = true;
         activeCoroutine = StartCoroutine(DoProcessLaunch());
     }
 
-    void MoveArm()
+    void MoveArmUp()
     {
         if (currentArmAngle >= launchAngle)
         {
@@ -73,9 +76,9 @@ public class Catapult : MonoBehaviour
             return;
         }
 
-        float total = Time.deltaTime * launchAngle * launchSpeed;
-        currentArmAngle += total;
-        catapultArm.transform.Rotate(-Vector3.up, total);
+        float step = Time.deltaTime * launchAngle * launchSpeed;
+        currentArmAngle += step;
+        catapultArm.transform.Rotate(-Vector3.up, step);
     }
 
     void Update()
@@ -83,8 +86,15 @@ public class Catapult : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Reset();
+        }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            springForce += 100;
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
             LaunchCannonBall();
         }
-        if (launching) MoveArm();
+        if (launching) MoveArmUp();
     }
 }
