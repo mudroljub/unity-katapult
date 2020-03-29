@@ -8,24 +8,22 @@ using System.Collections;
 public class Catapult : MonoBehaviour
 {
     public float springForce = 15000f;
-    public Vector3 defaultForce = new Vector3(-0.8f, 0.6f, 0.0f);
-    public float defaultVelocity = 13f;
+    public float launchAngle = 45;
+    public float launchSpeed = 10f;
 
     public CannonBall cannonBall;
     public GameObject catapultArm;
-    public Transform launchVector;
-
-    public const float launchSpeed = 5f;
-    public float launchAngle = 45;
-    public float currentArmAngle = 0f;
-
-    public bool ballLaunched = false;
-    public bool launched = false;
-    Quaternion armInitRotation;
-    Coroutine activeCoroutine;
 
     [Header("Internal References")]
     public Transform cannonBallPos;
+    public Transform launchVector;
+
+    private float currentArmAngle = 0f;
+    private bool ballLaunched = false;
+    private bool launched = false;
+
+    private Quaternion armInitRotation;
+    private Coroutine activeCoroutine;
 
     void Start()
     {

@@ -142,7 +142,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrain: {fileID: 1247680863}
-  springForce: 15000
   mainCam: {fileID: 534669904}
   uiCam: {fileID: 245567302}
   cubeWall: {fileID: 8378833687526306695}
@@ -564,6 +563,11 @@ PrefabInstance:
         type: 3}
       propertyPath: launchAngle
       value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 6125033089482099525, guid: 1066767f1113549128cd0af3e436ecac,
+        type: 3}
+      propertyPath: launchSpeed
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1066767f1113549128cd0af3e436ecac, type: 3}
