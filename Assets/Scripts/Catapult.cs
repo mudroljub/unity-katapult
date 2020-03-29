@@ -1,16 +1,16 @@
 ﻿/*
-- okretanje levo desno
-- da ne nestaje djule
+ * okretanje levo desno
+ * da ne nestaje djule
 */
 using UnityEngine;
 using System.Collections;
 
 public class Catapult : MonoBehaviour
 {
-    public float springForce = 15000f;
-    public float launchAngle = 45;
+    public float springForce = 8000;
     public float launchSpeed = 10f;
-    public float rotationSpeed = 1f;
+    public float rotationSpeed = 15f;
+    public float speed = 1f;
 
     public CannonBall cannonBall;
     public GameObject catapultArm;
@@ -19,7 +19,6 @@ public class Catapult : MonoBehaviour
     public Transform cannonBallPos;
     public Transform launchVector;
 
-    private float currentArmAngle = 45f;
     public bool launching = false;
     public bool lowering = false;
     private float initialForce;
@@ -37,13 +36,14 @@ public class Catapult : MonoBehaviour
     void Reset()
     {
         if (activeCoroutine != null) StopCoroutine(activeCoroutine);
-        //launching = false;
+        launching = false;
         springForce = initialForce;
         cannonBall.Reset(catapultArm.transform, cannonBallPos.position);
     }
 
     float InstantaneousVelocity()
     {
+        float launchAngle = 45; // TODO: izvesti vrednost iz trenutnog ugla
         float mass = cannonBall.rigidBody.mass;
         float angle = launchAngle * Mathf.Deg2Rad;
         // √(springForce / m) * angle² - (g * √2)
@@ -70,27 +70,26 @@ public class Catapult : MonoBehaviour
 
     void MoveArmUp()
     {
-        if (currentArmAngle >= launchAngle)
+        if (catapultArm.transform.rotation.eulerAngles.x >= 320)
         {
             launching = false;
             return;
         }
 
         float step = Time.deltaTime * 500;
-        currentArmAngle += step;
         catapultArm.transform.Rotate(-Vector3.up, step);
     }
 
     void MoveArmDown()
     {
-        if (currentArmAngle <= 0)
+        Debug.Log(catapultArm.transform.rotation.eulerAngles.x);
+        if (catapultArm.transform.rotation.eulerAngles.x <= 272)
         {
             lowering = false;
             return;
         }
 
         float step = Time.deltaTime * 50;
-        currentArmAngle -= step;
         catapultArm.transform.Rotate(-Vector3.down, step);
     }
 
@@ -111,8 +110,12 @@ public class Catapult : MonoBehaviour
             lowering = false;
         }
 
-        float rotation = Input.GetAxis("Horizontal") * rotationSpeed;
+        // turn left / right
+        float rotation = Input.GetAxis("Horizontal") * rotationSpeed * Time.deltaTime;
         transform.Rotate(0, rotation, 0);
+        // move
+        float translation = Input.GetAxis("Vertical") * speed * Time.deltaTime;
+        transform.Translate(-translation, 0, 0);
 
         if (launching) MoveArmUp();
         if (lowering) MoveArmDown();
