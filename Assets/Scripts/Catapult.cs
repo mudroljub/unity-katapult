@@ -1,13 +1,13 @@
 ﻿/*
  * da ne nestaje djule
- * da se vrte točkovi
+ * trzaj unazad
 */
 using UnityEngine;
 using System.Collections;
 
 public class Catapult : MonoBehaviour
 {
-    public float springForce = 5000;
+    public float springForce = 350;
     public float launchSpeed = 10f;
     public float rotationSpeed = 15f;
     public float speed = 1f;
@@ -37,7 +37,6 @@ public class Catapult : MonoBehaviour
         if (activeCoroutine != null) StopCoroutine(activeCoroutine);
         launching = false;
         springForce = initialForce;
-        cannonBall.Reset(catapultArm.transform, cannonBallPos.position);
     }
 
     float InstantaneousVelocity()
@@ -50,7 +49,10 @@ public class Catapult : MonoBehaviour
 
     void Launch()
     {
-        cannonBall.Launch(launchVector.up, InstantaneousVelocity());
+        CannonBall newBall = Instantiate(cannonBall);
+        newBall.Reset(catapultArm.transform, cannonBallPos.position);
+        newBall.Launch(launchVector.up, InstantaneousVelocity());
+        //Destroy(newBall.gameObject);
     }
 
     IEnumerator DoProcessLaunch()
@@ -99,7 +101,7 @@ public class Catapult : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Space))
         {
-            springForce += 100;
+            springForce += 1;
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
