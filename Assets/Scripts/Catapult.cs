@@ -79,7 +79,6 @@ public class Catapult : MonoBehaviour
         if (catapultArm.transform.rotation.eulerAngles.x >= maxAngle)
         {
             currState = State.Idle;
-            return;
         }
 
         float step = Time.deltaTime * 500;
@@ -90,11 +89,20 @@ public class Catapult : MonoBehaviour
     {
         if (catapultArm.transform.rotation.eulerAngles.x <= minAngle)
         {
-            return;
+            currState = State.Idle;
         }
 
         float step = Time.deltaTime * 50;
         catapultArm.transform.Rotate(-Vector3.down, step);
+    }
+
+    void CheckMovement()
+    {
+        float rotation = Input.GetAxis("Horizontal") * rotationSpeed * Time.deltaTime;
+        transform.Rotate(0, rotation, 0);
+
+        float translation = Input.GetAxis("Vertical") * speed * Time.deltaTime;
+        transform.Translate(-translation, 0, 0);
     }
 
     void Update()
@@ -113,13 +121,7 @@ public class Catapult : MonoBehaviour
             LaunchCannonBall();
         }
 
-        // turn left / right
-        float rotation = Input.GetAxis("Horizontal") * rotationSpeed * Time.deltaTime;
-        transform.Rotate(0, rotation, 0);
-
-        // move
-        float translation = Input.GetAxis("Vertical") * speed * Time.deltaTime;
-        transform.Translate(-translation, 0, 0);
+        CheckMovement();
 
         if (currState == State.Lifting) MoveArmUp();
         if (currState == State.Lowering) MoveArmDown();
