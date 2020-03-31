@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CubeWall : MonoBehaviour
 {
-    Dictionary<Transform, Vector3> cubeWallPositions = new Dictionary<Transform, Vector3>();
+    Dictionary<Transform, Vector3> initialPositions = new Dictionary<Transform, Vector3>();
 
     void Awake()
     {
@@ -16,14 +16,14 @@ public class CubeWall : MonoBehaviour
         {
             if (child.gameObject.tag == "cube")
             {
-                cubeWallPositions.Add(child.transform, child.position);
+                initialPositions.Add(child.transform, child.position);
             }
         }
     }
 
     void Reset()
     {
-        foreach(KeyValuePair<Transform, Vector3> cube in cubeWallPositions)
+        foreach(KeyValuePair<Transform, Vector3> cube in initialPositions)
         {
             cube.Key.position = cube.Value;
             cube.Key.rotation = Quaternion.identity;
