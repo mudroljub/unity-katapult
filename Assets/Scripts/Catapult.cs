@@ -24,19 +24,23 @@ public class Catapult : MonoBehaviour
     public bool launching = false;
     public bool lowering = false;
     private float initialForce; 
+    private float maxSpringForce = 1000;
     private Coroutine activeCoroutine;
+    CannonBall fakeBall;
 
     void Start()
     {
         initialForce = springForce;
-        Reset();
+        PlaceBall();
     }
 
-    void Reset()
+    void PlaceBall()
     {
         if (activeCoroutine != null) StopCoroutine(activeCoroutine);
         launching = false;
         springForce = initialForce;
+        if (fakeBall == null) fakeBall = Instantiate(cannonBall);
+        fakeBall.Place(catapultArm.transform, cannonBallPos.position);
     }
 
     float InstantaneousVelocity()
@@ -49,10 +53,9 @@ public class Catapult : MonoBehaviour
 
     void Launch()
     {
-        CannonBall newBall = Instantiate(cannonBall);
-        newBall.Reset(catapultArm.transform, cannonBallPos.position);
-        newBall.Launch(launchVector.up, InstantaneousVelocity());
-        //Destroy(newBall.gameObject);
+        CannonBall ball = Instantiate(cannonBall);
+        ball.Place(catapultArm.transform, cannonBallPos.position);
+        ball.Launch(launchVector.up, InstantaneousVelocity());
     }
 
     IEnumerator DoProcessLaunch()
@@ -64,8 +67,10 @@ public class Catapult : MonoBehaviour
 
     void LaunchCannonBall()
     {
+        Destroy(fakeBall.gameObject);
         launching = true;
         activeCoroutine = StartCoroutine(DoProcessLaunch());
+        lowering = false;
     }
 
     void MoveArmUp()
@@ -96,17 +101,16 @@ public class Catapult : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Reset();
+            PlaceBall();
             lowering = true;
         }
         if (Input.GetKey(KeyCode.Space))
         {
-            springForce += 1;
+            if (springForce < maxSpringForce) springForce += 1;
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
             LaunchCannonBall();
-            lowering = false;
         }
 
         // turn left / right
