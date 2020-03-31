@@ -3,12 +3,11 @@ using UnityEngine;
 
 public class CubeWall : MonoBehaviour
 {
-    public List<Rigidbody> boxRigidBodies = new List<Rigidbody>();
     public Dictionary<Transform, Vector3> cubeWallPositions = new Dictionary<Transform, Vector3>();
-    public List<GameObject> middleRowBoxes = new List<GameObject>();
 
     private void Awake()
     {
+        // init wall
         foreach(Transform child in transform)
         {
             if (child.gameObject.tag == "cube")
@@ -18,39 +17,39 @@ public class CubeWall : MonoBehaviour
         }
     }
 
-    // reset all boxes to initial positions
+    // reset to initial positions
     public void Reset()
     {
-        foreach(KeyValuePair<Transform, Vector3> pos in cubeWallPositions)
+        foreach(KeyValuePair<Transform, Vector3> cube in cubeWallPositions)
         {
-            pos.Key.position = pos.Value;
-            pos.Key.rotation = Quaternion.identity;
-            Rigidbody rigidBody = pos.Key.GetComponent<Rigidbody>();
+            cube.Key.position = cube.Value;
+            cube.Key.rotation = Quaternion.identity;
+            Rigidbody rigidBody = cube.Key.GetComponent<Rigidbody>();
             rigidBody.velocity = Vector3.zero;
             rigidBody.angularVelocity = Vector3.zero;
         }
     }
 
-    public void ShowCenterRowOnly()
-    {
-        Reset();
-        // Hide all boxes first
-        foreach (Rigidbody rigidBody in boxRigidBodies)
-        {
-            rigidBody.gameObject.SetActive(false);
-        }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    Debug.Log("kolizija");
+    //    switch (collision.gameObject.tag)
+    //    {
+    //        case "ball":
+    //            Debug.Log("Zid pogodjen");
+    //            break;
 
-        foreach (GameObject centerBox in middleRowBoxes)
-        {
-            centerBox.SetActive(true);
-        }
-    }
+    //        case "Terrain":
+    //            Debug.Log("Dodirnut pod");
+    //            break;
+    //    }
+    //}
 
-    public void ShowAllBoxes()
+    void Update()
     {
-        foreach (Rigidbody rigidBody in boxRigidBodies)
+        if (Input.GetKeyDown(KeyCode.Home))
         {
-            rigidBody.gameObject.SetActive(true);
+            Reset();
         }
     }
 }

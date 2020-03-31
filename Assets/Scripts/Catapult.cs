@@ -1,5 +1,5 @@
 ﻿/*
- * poeni
+ * poeni: odnos koliko kugli je potrošeno i koliko kocki oboreno
 */
 using UnityEngine;
 using System.Collections;
@@ -30,6 +30,7 @@ public class Catapult : MonoBehaviour
     private Coroutine activeCoroutine;
     private CannonBall currentBall;
     private bool shouldInstantiate = true;
+    private short ballsLaunched;
 
     void Start()
     {
@@ -57,6 +58,8 @@ public class Catapult : MonoBehaviour
     void Launch()
     {
         currentBall.Launch(launchVector.up, InstantaneousVelocity());
+        ballsLaunched++;
+        Debug.Log("Balls launched: " + ballsLaunched);
     }
 
     IEnumerator DoProcessLaunch()
