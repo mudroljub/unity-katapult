@@ -2,13 +2,13 @@
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject terrain;
-
-    [Header("Scene References")]
     public Camera mainCam;
     public Camera uiCam;
+    public Catapult catapult;
+    public Cube cube;
 
-    [SerializeField] private CubeWall cubeWall;
-    [SerializeField] public Catapult catapult;
-    [SerializeField] public CannonBall cannonBall;
+    private void Start()
+    {
+        
+    }
 }

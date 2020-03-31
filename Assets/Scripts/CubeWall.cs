@@ -33,11 +33,24 @@ public class CubeWall : MonoBehaviour
         }
     }
 
+    void CheckPositions()
+    {
+        foreach (KeyValuePair<Transform, Vector3> cube in initialPositions)
+        {
+            Debug.Log(cube.Key.position.Equals(cube.Value));
+            Debug.Log(cube.Key.rotation.Equals(Quaternion.identity));
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Home))
         {
             Reset();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            CheckPositions();
         }
     }
 }

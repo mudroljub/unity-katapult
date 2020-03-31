@@ -150,12 +150,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b35cb34c53cbe4208a17391daa2014d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrain: {fileID: 1247680863}
   mainCam: {fileID: 534669904}
   uiCam: {fileID: 245567302}
-  cubeWall: {fileID: 8378833687526306695}
   catapult: {fileID: 82447225}
-  cannonBall: {fileID: 0}
+  cube: {fileID: 6638881809189004765, guid: 7f99f616615d4c5409ee70c8c3aea9e7, type: 3}
 --- !u!4 &58954383
 Transform:
   m_ObjectHideFlags: 0
@@ -640,7 +638,7 @@ PrefabInstance:
     - target: {fileID: 6125033089482099525, guid: 1066767f1113549128cd0af3e436ecac,
         type: 3}
       propertyPath: speed
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 6125033089482099525, guid: 1066767f1113549128cd0af3e436ecac,
         type: 3}
@@ -999,15 +997,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a196364516b844f28d1e6e67b4624d8, type: 3}
---- !u!114 &8378833687526306695 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2452302889180328932, guid: 4a196364516b844f28d1e6e67b4624d8,
-    type: 3}
-  m_PrefabInstance: {fileID: 8378833687526306694}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1256d88c7d9d4da2ad39221e587a4f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
