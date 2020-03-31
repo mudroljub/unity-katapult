@@ -3,12 +3,16 @@ using UnityEngine;
 
 public class CubeWall : MonoBehaviour
 {
-    public Dictionary<Transform, Vector3> cubeWallPositions = new Dictionary<Transform, Vector3>();
+    Dictionary<Transform, Vector3> cubeWallPositions = new Dictionary<Transform, Vector3>();
 
-    private void Awake()
+    void Awake()
     {
-        // init wall
-        foreach(Transform child in transform)
+        InitPositions();
+    }
+
+    void InitPositions()
+    {
+        foreach (Transform child in transform)
         {
             if (child.gameObject.tag == "cube")
             {
@@ -17,8 +21,7 @@ public class CubeWall : MonoBehaviour
         }
     }
 
-    // reset to initial positions
-    public void Reset()
+    void Reset()
     {
         foreach(KeyValuePair<Transform, Vector3> cube in cubeWallPositions)
         {
@@ -29,21 +32,6 @@ public class CubeWall : MonoBehaviour
             rigidBody.angularVelocity = Vector3.zero;
         }
     }
-
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    Debug.Log("kolizija");
-    //    switch (collision.gameObject.tag)
-    //    {
-    //        case "ball":
-    //            Debug.Log("Zid pogodjen");
-    //            break;
-
-    //        case "Terrain":
-    //            Debug.Log("Dodirnut pod");
-    //            break;
-    //    }
-    //}
 
     void Update()
     {

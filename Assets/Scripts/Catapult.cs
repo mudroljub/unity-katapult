@@ -1,5 +1,7 @@
 ﻿/*
  * poeni: odnos koliko kugli je potrošeno i koliko kocki oboreno
+ * proveriti koje kocke nisu na svom mestu
+ * praviti zid dinamički
 */
 using UnityEngine;
 using System.Collections;

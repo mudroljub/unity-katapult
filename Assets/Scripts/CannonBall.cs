@@ -28,20 +28,19 @@ public class CannonBall : MonoBehaviour
         inAir = true;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        switch (collision.gameObject.tag)
-        {
-            case "Terrain":
-                inAir = false;
-                rigidBody.drag = 2;
-                break;
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    switch (collision.gameObject.tag)
+    //    {
+    //        case "Terrain":
+    //            inAir = false;
+    //            rigidBody.drag = 2;
+    //            break;
 
-            case "cube":
-                Debug.Log("Hit wall");
-                break;
-        }
-    }
-
+    //        case "cube":
+    //            Debug.Log("Hit wall");
+    //            break;
+    //    }
+    //}
 
 }
