@@ -16,17 +16,17 @@ public class Catapult : MonoBehaviour
 
     public CannonBall cannonBall;
     public GameObject catapultArm;
-
-    [Header("Internal References")]
     public Transform cannonBallPos;
     public Transform launchVector;
 
-    public bool launching = false;
+    public bool lifting = false;
     public bool lowering = false;
+
     private float initialForce; 
     private float maxSpringForce = 1000;
     private Coroutine activeCoroutine;
-    CannonBall fakeBall;
+    private CannonBall currentBall;
+    private bool shouldInstantiate = true;
 
     void Start()
     {
@@ -37,10 +37,11 @@ public class Catapult : MonoBehaviour
     void PlaceBall()
     {
         if (activeCoroutine != null) StopCoroutine(activeCoroutine);
-        launching = false;
+        lifting = false;
         springForce = initialForce;
-        if (fakeBall == null) fakeBall = Instantiate(cannonBall);
-        fakeBall.Place(catapultArm.transform, cannonBallPos.position);
+        if (shouldInstantiate) currentBall = Instantiate(cannonBall);
+        currentBall.Place(catapultArm.transform, cannonBallPos.position);
+        shouldInstantiate = false;
     }
 
     float InstantaneousVelocity()
@@ -53,22 +54,20 @@ public class Catapult : MonoBehaviour
 
     void Launch()
     {
-        CannonBall ball = Instantiate(cannonBall);
-        ball.Place(catapultArm.transform, cannonBallPos.position);
-        ball.Launch(launchVector.up, InstantaneousVelocity());
+        currentBall.Launch(launchVector.up, InstantaneousVelocity());
     }
 
     IEnumerator DoProcessLaunch()
     {
-        yield return new WaitWhile(() => launching);
+        yield return new WaitWhile(() => lifting);
         Launch();
         activeCoroutine = null;
     }
 
     void LaunchCannonBall()
     {
-        Destroy(fakeBall.gameObject);
-        launching = true;
+        shouldInstantiate = true;
+        lifting = true;
         activeCoroutine = StartCoroutine(DoProcessLaunch());
         lowering = false;
     }
@@ -77,7 +76,7 @@ public class Catapult : MonoBehaviour
     {
         if (catapultArm.transform.rotation.eulerAngles.x >= maxAngle)
         {
-            launching = false;
+            lifting = false;
             return;
         }
 
@@ -89,7 +88,6 @@ public class Catapult : MonoBehaviour
     {
         if (catapultArm.transform.rotation.eulerAngles.x <= minAngle)
         {
-            lowering = false;
             return;
         }
 
@@ -116,11 +114,12 @@ public class Catapult : MonoBehaviour
         // turn left / right
         float rotation = Input.GetAxis("Horizontal") * rotationSpeed * Time.deltaTime;
         transform.Rotate(0, rotation, 0);
+
         // move
         float translation = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         transform.Translate(-translation, 0, 0);
 
-        if (launching) MoveArmUp();
+        if (lifting) MoveArmUp();
         if (lowering) MoveArmDown();
     }
 }
