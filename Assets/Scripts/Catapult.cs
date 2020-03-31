@@ -1,6 +1,6 @@
 ﻿/*
- * da ne nestaje djule
  * trzaj unazad
+ * poeni
 */
 using UnityEngine;
 using System.Collections;
@@ -19,9 +19,13 @@ public class Catapult : MonoBehaviour
     public Transform cannonBallPos;
     public Transform launchVector;
 
-    public bool lifting = false;
-    public bool lowering = false;
-
+    enum State
+    {
+        Lifting,
+        Lowering,
+        Idle
+    }
+    State currState = State.Idle;
     private float initialForce; 
     private float maxSpringForce = 1000;
     private Coroutine activeCoroutine;
@@ -37,7 +41,6 @@ public class Catapult : MonoBehaviour
     void PlaceBall()
     {
         if (activeCoroutine != null) StopCoroutine(activeCoroutine);
-        lifting = false;
         springForce = initialForce;
         if (shouldInstantiate) currentBall = Instantiate(cannonBall);
         currentBall.Place(catapultArm.transform, cannonBallPos.position);
@@ -59,7 +62,7 @@ public class Catapult : MonoBehaviour
 
     IEnumerator DoProcessLaunch()
     {
-        yield return new WaitWhile(() => lifting);
+        yield return new WaitWhile(() => currState == State.Lifting);
         Launch();
         activeCoroutine = null;
     }
@@ -67,16 +70,15 @@ public class Catapult : MonoBehaviour
     void LaunchCannonBall()
     {
         shouldInstantiate = true;
-        lifting = true;
+        currState = State.Lifting;
         activeCoroutine = StartCoroutine(DoProcessLaunch());
-        lowering = false;
     }
 
     void MoveArmUp()
     {
         if (catapultArm.transform.rotation.eulerAngles.x >= maxAngle)
         {
-            lifting = false;
+            currState = State.Idle;
             return;
         }
 
@@ -100,7 +102,7 @@ public class Catapult : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             PlaceBall();
-            lowering = true;
+            currState = State.Lowering;
         }
         if (Input.GetKey(KeyCode.Space))
         {
@@ -119,7 +121,7 @@ public class Catapult : MonoBehaviour
         float translation = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         transform.Translate(-translation, 0, 0);
 
-        if (lifting) MoveArmUp();
-        if (lowering) MoveArmDown();
+        if (currState == State.Lifting) MoveArmUp();
+        if (currState == State.Lowering) MoveArmDown();
     }
 }
