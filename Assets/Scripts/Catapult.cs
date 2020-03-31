@@ -1,5 +1,4 @@
 ﻿/*
- * trzaj unazad
  * poeni
 */
 using UnityEngine;
@@ -72,6 +71,7 @@ public class Catapult : MonoBehaviour
         shouldInstantiate = true;
         currState = State.Lifting;
         activeCoroutine = StartCoroutine(DoProcessLaunch());
+        transform.Translate(.03f, 0, 0);
     }
 
     void MoveArmUp()
@@ -79,6 +79,7 @@ public class Catapult : MonoBehaviour
         if (catapultArm.transform.rotation.eulerAngles.x >= maxAngle)
         {
             currState = State.Idle;
+            return;
         }
 
         float step = Time.deltaTime * 500;
@@ -90,6 +91,7 @@ public class Catapult : MonoBehaviour
         if (catapultArm.transform.rotation.eulerAngles.x <= minAngle)
         {
             currState = State.Idle;
+            return;
         }
 
         float step = Time.deltaTime * 50;
