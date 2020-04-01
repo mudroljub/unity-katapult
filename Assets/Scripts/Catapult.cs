@@ -1,6 +1,7 @@
 ﻿/*
  * prikazati poene: koliko kugli je potrošeno i koliko kocki oboreno
  * nekako proveriti koje kocke nisu na svom mestu (porediti y sa inicijalnom visinom?)
+ * dodati razmak između paljbe
  * BUG: nekad kašika probije nadole kad se duže drži
 */
 using UnityEngine;
