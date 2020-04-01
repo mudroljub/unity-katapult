@@ -1,7 +1,7 @@
 ﻿/*
- * poeni: odnos koliko kugli je potrošeno i koliko kocki oboreno
- * proveriti koje kocke nisu na svom mestu
- * praviti zid dinamički
+ * prikazati poene: koliko kugli je potrošeno i koliko kocki oboreno
+ * nekako proveriti koje kocke nisu na svom mestu (porediti y sa inicijalnom visinom?)
+ * BUG: nekad kašika probije nadole kad se duže drži
 */
 using UnityEngine;
 using System.Collections;

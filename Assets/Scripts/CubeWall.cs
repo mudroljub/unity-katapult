@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: iskoristiti pa obrisati ili prebaciti novu logiku zida
 public class CubeWall : MonoBehaviour
 {
     Dictionary<Transform, Vector3> initialPositions = new Dictionary<Transform, Vector3>();
