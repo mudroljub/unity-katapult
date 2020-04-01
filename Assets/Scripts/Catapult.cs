@@ -33,6 +33,7 @@ public class Catapult : MonoBehaviour
     private Coroutine activeCoroutine;
     private CannonBall currentBall;
     private bool shouldInstantiate = true;
+    private byte maxShoots = 100;
 
     void Start()
     {
@@ -57,50 +58,47 @@ public class Catapult : MonoBehaviour
         return Mathf.Sqrt(springForce / mass * Mathf.Pow(angle, 2) - Physics.gravity.y * Mathf.Sqrt(2f));
     }
 
-    void Launch()
-    {
-        if (ballsLaunched > 100) return;
-        currentBall.Launch(launchVector.up, InstantaneousVelocity());
-        ballsLaunched++;
-    }
-
-    IEnumerator DoProcessLaunch()
-    {
-        yield return new WaitWhile(() => currState == State.Lifting);
-        Launch();
-        activeCoroutine = null;
-    }
-
-    void LaunchCannonBall()
+    void StartLifting()
     {
         shouldInstantiate = true;
         currState = State.Lifting;
-        activeCoroutine = StartCoroutine(DoProcessLaunch());
-        transform.Translate(.03f, 0, 0);
+        activeCoroutine = StartCoroutine(Launch());
+        transform.Translate(.03f, 0, 0); // trzaj
+    }
+
+    IEnumerator Launch()
+    {
+        yield return new WaitWhile(() => currState == State.Lifting);
+        currentBall.Launch(launchVector.up, InstantaneousVelocity());
+        ballsLaunched++;
+        //yield return new WaitForSeconds(0.5f);
+        activeCoroutine = null;
     }
 
     void MoveArmUp()
     {
-        if (catapultArm.transform.rotation.eulerAngles.x >= maxAngle)
-        {
-            currState = State.Idle;
-            return;
-        }
+        if (currState != State.Lifting) return;
 
         float step = Time.deltaTime * 500;
         catapultArm.transform.Rotate(-Vector3.up, step);
+
+        if (catapultArm.transform.rotation.eulerAngles.x >= maxAngle)
+        {
+            currState = State.Idle;
+        }
     }
 
     void MoveArmDown()
     {
-        if (catapultArm.transform.rotation.eulerAngles.x <= minAngle)
-        {
-            currState = State.Idle;
-            return;
-        }
+        if (currState != State.Lowering) return;
 
         float step = Time.deltaTime * 50;
         catapultArm.transform.Rotate(-Vector3.down, step);
+
+        if (catapultArm.transform.rotation.eulerAngles.x <= minAngle)
+        {
+            currState = State.Idle;
+        }
     }
 
     void CheckMovement()
@@ -112,8 +110,10 @@ public class Catapult : MonoBehaviour
         transform.Translate(-translation, 0, 0);
     }
 
-    void Update()
+    void handleLaunch()
     {
+        if (ballsLaunched >= maxShoots) return;
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             PlaceBall();
@@ -125,12 +125,15 @@ public class Catapult : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            LaunchCannonBall();
+            StartLifting();
         }
+    }
 
+    void Update()
+    {
+        handleLaunch();
         CheckMovement();
-
-        if (currState == State.Lifting) MoveArmUp();
-        if (currState == State.Lowering) MoveArmDown();
+        MoveArmUp();
+        MoveArmDown();
     }
 }
