@@ -2,7 +2,7 @@
 using UnityEngine;
 
 // TODO: implement Reset
-public class CubeWall : MonoBehaviour
+public class Wall : MonoBehaviour
 {
     public Cube cube;
 
@@ -27,7 +27,7 @@ public class CubeWall : MonoBehaviour
         for (byte j = 0; j < rows; j++) InitRow(1 + j * 2);
     }
 
-    void CheckDistance()
+    void CheckCollapsed()
     {
         byte counter = 0;
         foreach (KeyValuePair<Cube, Vector3> item in initialPositions)
@@ -42,7 +42,7 @@ public class CubeWall : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.End))
         {
-            CheckDistance();
+            CheckCollapsed();
         }
     }
 }
