@@ -20,6 +20,8 @@ public class Catapult : MonoBehaviour
     public GameObject catapultArm;
     public Transform cannonBallPos;
     public Transform launchVector;
+    [HideInInspector]
+    public short ballsLaunched;
 
     enum State
     {
@@ -33,7 +35,6 @@ public class Catapult : MonoBehaviour
     private Coroutine activeCoroutine;
     private CannonBall currentBall;
     private bool shouldInstantiate = true;
-    private short ballsLaunched;
 
     void Start()
     {

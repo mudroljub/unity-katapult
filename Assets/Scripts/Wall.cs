@@ -27,7 +27,7 @@ public class Wall : MonoBehaviour
         for (byte j = 0; j < rows; j++) InitRow(1 + j * 2);
     }
 
-    void CheckCollapsed()
+    public byte CheckCollapsed()
     {
         byte counter = 0;
         foreach (KeyValuePair<Cube, Vector3> item in initialPositions)
@@ -35,14 +35,6 @@ public class Wall : MonoBehaviour
             float dist = Vector3.Distance(item.Key.transform.position, item.Value);
             if (dist >= 2) counter++;
         }
-        print("Ukupno je oboreno " + counter);
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.End))
-        {
-            CheckCollapsed();
-        }
+        return counter;
     }
 }

@@ -153,6 +153,7 @@ MonoBehaviour:
   mainCam: {fileID: 534669904}
   uiCam: {fileID: 245567302}
   catapult: {fileID: 82447225}
+  wall: {fileID: 149120510}
 --- !u!4 &58954383
 Transform:
   m_ObjectHideFlags: 0
