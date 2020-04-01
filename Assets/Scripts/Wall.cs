@@ -4,9 +4,9 @@ using UnityEngine;
 // TODO: implement Reset
 public class Wall : MonoBehaviour
 {
-    public Cube cube;
+    public GameObject cube;
 
-    Dictionary<Cube, Vector3> initialPositions = new Dictionary<Cube, Vector3>();
+    Dictionary<GameObject, Vector3> initialPositions = new Dictionary<GameObject, Vector3>();
 
     void Start()
     {
@@ -17,7 +17,7 @@ public class Wall : MonoBehaviour
     {
         for (byte i = 0; i < 10; i++)
         {
-            Cube newCube = Instantiate(cube, new Vector3(140, y, -10 + i * 2), Quaternion.identity);
+            GameObject newCube = Instantiate(cube, new Vector3(140, y, -10 + i * 2), Quaternion.identity);
             initialPositions.Add(newCube, new Vector3(140, y, -10 + i * 2));
         }
     }
@@ -30,7 +30,7 @@ public class Wall : MonoBehaviour
     public byte CheckCollapsed()
     {
         byte counter = 0;
-        foreach (KeyValuePair<Cube, Vector3> item in initialPositions)
+        foreach (KeyValuePair<GameObject, Vector3> item in initialPositions)
         {
             float dist = Vector3.Distance(item.Key.transform.position, item.Value);
             if (dist >= 2) counter++;

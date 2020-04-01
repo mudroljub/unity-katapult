@@ -1,5 +1,5 @@
 ﻿/*
- * dodati razmak između paljbe, ograniciti ukupan broj
+ * dodati razmak između paljbe
  * BUG: nekad kašika probije nadole kad se duže drži
 */
 using UnityEngine;
@@ -19,7 +19,7 @@ public class Catapult : MonoBehaviour
     public Transform cannonBallPos;
     public Transform launchVector;
     [HideInInspector]
-    public short ballsLaunched;
+    public byte ballsLaunched;
 
     enum State
     {
@@ -59,9 +59,9 @@ public class Catapult : MonoBehaviour
 
     void Launch()
     {
+        if (ballsLaunched > 100) return;
         currentBall.Launch(launchVector.up, InstantaneousVelocity());
         ballsLaunched++;
-        Debug.Log("Balls launched: " + ballsLaunched);
     }
 
     IEnumerator DoProcessLaunch()
